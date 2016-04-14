@@ -27,7 +27,6 @@ void FRM_push(uint8_t* data, uint16_t length);
  */
 uint16_t FRM_pull(uint8_t* data);
 
-void FRM_assignChannelInit(void (*functPtr)());
 void FRM_assignChannelReadable(uint16_t (*functPtr)());
 void FRM_assignChannelWriteable(uint16_t (*functPtr)());
 void FRM_assignChannelRead(void (*functPtr)(void* data, uint32_t length));

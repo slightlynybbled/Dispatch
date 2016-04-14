@@ -26,7 +26,8 @@ int main(void){
 
 void initDispatch(void){
     /* link dispatch to the UART channels */
-    DIS_assignChannelInit(&UART_init);
+    UART_init();
+    
     DIS_assignChannelReadable(&UART_readable);
     DIS_assignChannelWriteable(&UART_writeable);
     DIS_assignChannelRead(&UART_read);

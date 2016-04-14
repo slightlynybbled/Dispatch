@@ -77,10 +77,43 @@ void DIS_process(void);
  */
 uint16_t DIS_getElements(uint16_t element, void* destArray);
 
-void DIS_assignChannelInit(void (*functPtr)());
+/** 
+ * Use this function to assign the 'readable' function.  The 
+ * 'readable' function must return a uint16_t and takes a
+ * void.
+ * 
+ * @param *functPtr a function pointer for a function that will
+ * return the number of bytes waiting to be read from the
+ * communication channel */
 void DIS_assignChannelReadable(uint16_t (*functPtr)());
+
+/** 
+ * Use this function to assign the 'writeable' funciton.  The
+ * 'writeable' function must return a uint16_t and take a void.
+ * 
+ * @param *functPtr a function pointer for a function that will
+ * return the number of bytes that are able to be written to
+ * the communication channel */
 void DIS_assignChannelWriteable(uint16_t (*functPtr)());
-void DIS_assignChannelRead(void (*functPtr)(void* data, uint32_t length));
-void DIS_assignChannelWrite(void (*functPtr)(void* data, uint32_t length));
+
+/** 
+ * Use this function to assign the 'read' function.  The 'read'
+ * function must take a data pointer and a length.  This allows
+ * the function to read <length> amount of data from the incoming
+ * channel buffer into the <data> array.
+ * 
+ * @param *functPtr a function pointer for a function that will
+ * read <length> data into the array <data> */
+void DIS_assignChannelRead(void (*functPtr)(void* data, uint16_t length));
+
+/** 
+ * Use this function to assign the 'write' function.  The 'write'
+ * function must take a data pointer and a length.  This allows
+ * the function to write <length> amount of data to the outgoing
+ * channel buffer from the <data> array.
+ * 
+ * @param *functPtr a function pointer for a function that will
+ * write <length> data from <data> to the outgoing buffer */
+void DIS_assignChannelWrite(void (*functPtr)(void* data, uint16_t length));
 
 #endif
