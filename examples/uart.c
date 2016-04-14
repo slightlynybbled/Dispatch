@@ -32,7 +32,7 @@ void UART_init(void){
     return;
 }
 
-void UART_read(void* data, uint32_t length){
+void UART_read(void* data, uint16_t length){
     uint32_t i = 0;
     uint8_t* d = (uint8_t*)data;
     
@@ -42,7 +42,7 @@ void UART_read(void* data, uint32_t length){
     }
 }
 
-void UART_write(void* data, uint32_t length){
+void UART_write(void* data, uint16_t length){
     uint32_t i = 0;
     uint8_t* d = (uint8_t*)data;
     

@@ -12,15 +12,10 @@ static uint16_t rxFrameIndex = 0;
 void FRM_pushByte(uint8_t data);
 uint16_t FRM_fletcher16(uint8_t* data, size_t bytes);
 
-void (*channelInitFunctPtr)();
 uint16_t (*channelReadableFunctPtr)();
 uint16_t (*channelWriteableFunctPtr)();
 void (*channelReadFunctPtr)();
 void (*channelWriteFunctPtr)(void* data, uint32_t length);
-
-void FRM_init(void){
-    channelInitFunctPtr();
-}
 
 void FRM_push(uint8_t* data, uint16_t length){
     int16_t i = 0;
@@ -172,10 +167,6 @@ uint16_t FRM_fletcher16(uint8_t* data, size_t length){
     uint16_t checksum = (sum2 << 8) | sum1;
     
 	return checksum;
-}
-
-void FRM_assignChannelInit(void (*functPtr)()){
-    channelInitFunctPtr = functPtr;
 }
 
 void FRM_assignChannelReadable(uint16_t (*functPtr)()){
