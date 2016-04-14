@@ -78,22 +78,23 @@ Program Memory  [Origin = 0x200, Length = 0x2a00]
 section                    address   length (PC units)   length (bytes) (dec)
 -------                    -------   -----------------   --------------------
 .text                        0x200               0x27c           0x3ba  (954)
-.text                        0x47c              0x186a          0x249f  (9375)
-.dinit                      0x1ce6                0x52            0x7b  (123)
-.text                       0x1d38                0x20            0x30  (48)
+.const                       0x47c                0x12            0x1b  (27)
+.text                        0x48e              0x183e          0x245d  (9309)
+.dinit                      0x1ccc                0x52            0x7b  (123)
+.text                       0x1d1e                0x40            0x60  (96)
 
-                     Total program memory used (bytes):         0x2904  (10500) 65%
+                     Total program memory used (bytes):         0x290d  (10509) 65%
 
 
 Data Memory  [Origin = 0x800, Length = 0x800]
 
 section                    address      alignment gaps    total length  (dec)
 -------                    -------      --------------    -------------------
-.nbss                        0x800                   0           0x2ec  (748)
-.data                        0xaec                   0            0x4a  (74)
-.bss                         0xb36                   0             0x4  (4)
+.nbss                        0x800                   0           0x2ea  (746)
+.data                        0xaea                   0            0x4a  (74)
+.bss                         0xb34                   0             0x4  (4)
 
-                        Total data memory used (bytes):          0x33a  (826) 40%
+                        Total data memory used (bytes):          0x338  (824) 40%
 
 
 Dynamic Memory Usage
@@ -101,30 +102,28 @@ Dynamic Memory Usage
 region                     address                      maximum length  (dec)
 ------                     -------                      ---------------------
 heap                             0                                   0  (0)
-stack                        0xb3a                               0x4c6  (1222)
+stack                        0xb38                               0x4c8  (1224)
 
-                        Maximum dynamic memory (bytes):          0x4c6  (1222)
+                        Maximum dynamic memory (bytes):          0x4c8  (1224)
 
 
 External Symbols in Data Memory (by address):
 
-                    0x0ae2                  _channelInitFunctPtr
-                    0x0ae4                  _channelReadableFunctPtr
-                    0x0ae6                  _channelWriteableFunctPtr
-                    0x0ae8                  _channelReadFunctPtr
-                    0x0aea                  _channelWriteFunctPtr
-                    0x0b36                  _errno
-                    0x0b38                  __Tls_setup_errno
+                    0x0ae2                  _channelReadableFunctPtr
+                    0x0ae4                  _channelWriteableFunctPtr
+                    0x0ae6                  _channelReadFunctPtr
+                    0x0ae8                  _channelWriteFunctPtr
+                    0x0b34                  _errno
+                    0x0b36                  __Tls_setup_errno
 
 External Symbols in Data Memory (by name):
 
-                    0x0b38                  __Tls_setup_errno
-                    0x0ae2                  _channelInitFunctPtr
-                    0x0ae8                  _channelReadFunctPtr
-                    0x0ae4                  _channelReadableFunctPtr
-                    0x0aea                  _channelWriteFunctPtr
-                    0x0ae6                  _channelWriteableFunctPtr
-                    0x0b36                  _errno
+                    0x0b36                  __Tls_setup_errno
+                    0x0ae6                  _channelReadFunctPtr
+                    0x0ae2                  _channelReadableFunctPtr
+                    0x0ae8                  _channelWriteFunctPtr
+                    0x0ae4                  _channelWriteableFunctPtr
+                    0x0b34                  _errno
 
 External Symbols in Program Memory (by address):
 
@@ -142,101 +141,96 @@ External Symbols in Program Memory (by address):
                   0x00043c                  _memchr
                   0x000450                  ___udivsi3
                   0x000470                  ___mulp32eds3
-                  0x000470                  ___mulp32peds3
                   0x000470                  ___mulsi3
-                  0x00047c                  _DIS_init
-                  0x0004b2                  _DIS_publish
-                  0x000930                  _publish_str
-                  0x00097c                  _publish_u8
-                  0x0009d4                  _publish_s8
-                  0x000a2e                  _publish_u16
-                  0x000ab4                  _publish_s16
-                  0x000b3a                  _publish_u32
-                  0x000c38                  _publish_s32
-                  0x000d36                  _getCurrentMessageWidth
-                  0x000dc8                  _DIS_subscribe
-                  0x000e40                  _DIS_unsubscribe
-                  0x000e86                  _DIS_process
-                  0x001082                  _DIS_getElements
-                  0x0013a2                  _getCurrentRxPointerIndex
-                  0x001436                  _DIS_assignChannelInit
-                  0x001442                  _DIS_assignChannelReadable
-                  0x00144e                  _DIS_assignChannelWriteable
-                  0x00145a                  _DIS_assignChannelRead
-                  0x001466                  _DIS_assignChannelWrite
-                  0x001472                  _BUF_init
-                  0x00152c                  _BUF_status
-                  0x001568                  _BUF_emptySlots
-                  0x0015c2                  _BUF_fullSlots
-                  0x00161c                  _BUF_write8
-                  0x001676                  _BUF_write16
-                  0x0016d2                  _BUF_write32
-                  0x001732                  _BUF_read8
-                  0x00178c                  _BUF_read16
-                  0x0017ea                  _BUF_read32
-                  0x00184a                  _FRM_init
-                  0x001854                  _FRM_push
-                  0x0018be                  _FRM_pushByte
-                  0x00190a                  _FRM_pull
-                  0x001ab6                  _FRM_fletcher16
-                  0x001b10                  _FRM_assignChannelInit
-                  0x001b1c                  _FRM_assignChannelReadable
-                  0x001b28                  _FRM_assignChannelWriteable
-                  0x001b34                  _FRM_assignChannelRead
-                  0x001b40                  _FRM_assignChannelWrite
-                  0x001b4c                  _UART_init
-                  0x001bba                  _UART_read
-                  0x001bf4                  _UART_write
-                  0x001c46                  _UART_readable
-                  0x001c52                  _UART_writeable
-                  0x001c5e                  __U1TXInterrupt
-                  0x001ca6                  __U1RXInterrupt
-                  0x001d38                  _main
+                  0x000470                  ___mulp32peds3
+                  0x00048e                  _DIS_init
+                  0x0004c2                  _DIS_publish
+                  0x000940                  _publish_str
+                  0x00098c                  _publish_u8
+                  0x0009e4                  _publish_s8
+                  0x000a3e                  _publish_u16
+                  0x000ac4                  _publish_s16
+                  0x000b4a                  _publish_u32
+                  0x000c48                  _publish_s32
+                  0x000d46                  _getCurrentMessageWidth
+                  0x000dd8                  _DIS_subscribe
+                  0x000e50                  _DIS_unsubscribe
+                  0x000e96                  _DIS_process
+                  0x001092                  _DIS_getElements
+                  0x0013b2                  _getCurrentRxPointerIndex
+                  0x001446                  _DIS_assignChannelReadable
+                  0x001452                  _DIS_assignChannelWriteable
+                  0x00145e                  _DIS_assignChannelRead
+                  0x00146a                  _DIS_assignChannelWrite
+                  0x001476                  _BUF_init
+                  0x001530                  _BUF_status
+                  0x00156c                  _BUF_emptySlots
+                  0x0015c6                  _BUF_fullSlots
+                  0x001620                  _BUF_write8
+                  0x00167a                  _BUF_write16
+                  0x0016d6                  _BUF_write32
+                  0x001736                  _BUF_read8
+                  0x001790                  _BUF_read16
+                  0x0017ee                  _BUF_read32
+                  0x00184e                  _FRM_push
+                  0x0018b8                  _FRM_pushByte
+                  0x001904                  _FRM_pull
+                  0x001ab0                  _FRM_fletcher16
+                  0x001b0a                  _FRM_assignChannelReadable
+                  0x001b16                  _FRM_assignChannelWriteable
+                  0x001b22                  _FRM_assignChannelRead
+                  0x001b2e                  _FRM_assignChannelWrite
+                  0x001b3a                  _UART_init
+                  0x001ba8                  _UART_read
+                  0x001bde                  _UART_write
+                  0x001c2c                  _UART_readable
+                  0x001c38                  _UART_writeable
+                  0x001c44                  __U1TXInterrupt
+                  0x001c8c                  __U1RXInterrupt
+                  0x001d1e                  _main
                   0x001d3e                  _initDispatch
+                  0x001d58                  _mySubscriberFunction
 
 External Symbols in Program Memory (by name):
 
-                  0x001568                  _BUF_emptySlots
-                  0x0015c2                  _BUF_fullSlots
-                  0x001472                  _BUF_init
-                  0x00178c                  _BUF_read16
-                  0x0017ea                  _BUF_read32
-                  0x001732                  _BUF_read8
-                  0x00152c                  _BUF_status
-                  0x001676                  _BUF_write16
-                  0x0016d2                  _BUF_write32
-                  0x00161c                  _BUF_write8
-                  0x001436                  _DIS_assignChannelInit
-                  0x00145a                  _DIS_assignChannelRead
-                  0x001442                  _DIS_assignChannelReadable
-                  0x001466                  _DIS_assignChannelWrite
-                  0x00144e                  _DIS_assignChannelWriteable
-                  0x001082                  _DIS_getElements
-                  0x00047c                  _DIS_init
-                  0x000e86                  _DIS_process
-                  0x0004b2                  _DIS_publish
-                  0x000dc8                  _DIS_subscribe
-                  0x000e40                  _DIS_unsubscribe
-                  0x001b10                  _FRM_assignChannelInit
-                  0x001b34                  _FRM_assignChannelRead
-                  0x001b1c                  _FRM_assignChannelReadable
-                  0x001b40                  _FRM_assignChannelWrite
-                  0x001b28                  _FRM_assignChannelWriteable
-                  0x001ab6                  _FRM_fletcher16
-                  0x00184a                  _FRM_init
-                  0x00190a                  _FRM_pull
-                  0x001854                  _FRM_push
-                  0x0018be                  _FRM_pushByte
-                  0x001b4c                  _UART_init
-                  0x001bba                  _UART_read
-                  0x001c46                  _UART_readable
-                  0x001bf4                  _UART_write
-                  0x001c52                  _UART_writeable
+                  0x00156c                  _BUF_emptySlots
+                  0x0015c6                  _BUF_fullSlots
+                  0x001476                  _BUF_init
+                  0x001790                  _BUF_read16
+                  0x0017ee                  _BUF_read32
+                  0x001736                  _BUF_read8
+                  0x001530                  _BUF_status
+                  0x00167a                  _BUF_write16
+                  0x0016d6                  _BUF_write32
+                  0x001620                  _BUF_write8
+                  0x00145e                  _DIS_assignChannelRead
+                  0x001446                  _DIS_assignChannelReadable
+                  0x00146a                  _DIS_assignChannelWrite
+                  0x001452                  _DIS_assignChannelWriteable
+                  0x001092                  _DIS_getElements
+                  0x00048e                  _DIS_init
+                  0x000e96                  _DIS_process
+                  0x0004c2                  _DIS_publish
+                  0x000dd8                  _DIS_subscribe
+                  0x000e50                  _DIS_unsubscribe
+                  0x001b22                  _FRM_assignChannelRead
+                  0x001b0a                  _FRM_assignChannelReadable
+                  0x001b2e                  _FRM_assignChannelWrite
+                  0x001b16                  _FRM_assignChannelWriteable
+                  0x001ab0                  _FRM_fletcher16
+                  0x001904                  _FRM_pull
+                  0x00184e                  _FRM_push
+                  0x0018b8                  _FRM_pushByte
+                  0x001b3a                  _UART_init
+                  0x001ba8                  _UART_read
+                  0x001c2c                  _UART_readable
+                  0x001bde                  _UART_write
+                  0x001c38                  _UART_writeable
                   0x0002ae                  __DefaultInterrupt
                   0x000430                  __Geterrno
                   0x0002de                  __Stoul
-                  0x001ca6                  __U1RXInterrupt
-                  0x001c5e                  __U1TXInterrupt
+                  0x001c8c                  __U1RXInterrupt
+                  0x001c44                  __U1TXInterrupt
                   0x000470                  ___mulp32eds3
                   0x000470                  ___mulp32peds3
                   0x000470                  ___mulsi3
@@ -245,19 +239,20 @@ External Symbols in Program Memory (by name):
                   0x00023c                  __data_init_standard
                   0x00022c                  __psv_init
                   0x000200                  __resetPRI
-                  0x000d36                  _getCurrentMessageWidth
-                  0x0013a2                  _getCurrentRxPointerIndex
+                  0x000d46                  _getCurrentMessageWidth
+                  0x0013b2                  _getCurrentRxPointerIndex
                   0x001d3e                  _initDispatch
                   0x000412                  _isspace
-                  0x001d38                  _main
+                  0x001d1e                  _main
                   0x00043c                  _memchr
-                  0x000ab4                  _publish_s16
-                  0x000c38                  _publish_s32
-                  0x0009d4                  _publish_s8
-                  0x000930                  _publish_str
-                  0x000a2e                  _publish_u16
-                  0x000b3a                  _publish_u32
-                  0x00097c                  _publish_u8
+                  0x001d58                  _mySubscriberFunction
+                  0x000ac4                  _publish_s16
+                  0x000c48                  _publish_s32
+                  0x0009e4                  _publish_s8
+                  0x000940                  _publish_str
+                  0x000a3e                  _publish_u16
+                  0x000b4a                  _publish_u32
+                  0x00098c                  _publish_u8
                   0x0002b2                  _strcmp
                   0x0002d2                  _strlen
                   0x000422                  _tolower
@@ -379,45 +374,45 @@ __FICD
 .comment
  *(.comment)
 
-.debug_info       0x000000       0x268f
+.debug_info       0x000000       0x2660
  *(.debug_info)
- .debug_info      0x000000        0x5d3 build/default/production/_ext/1445274692/frame.o
- .debug_info      0x0005d3        0x13e build/default/production/_ext/1472/main.o
- .debug_info      0x000711        0xd5e build/default/production/_ext/1445274692/dispatch.o
- .debug_info      0x00146f        0xc1c build/default/production/_ext/1472/uart.o
- .debug_info      0x00208b        0x604 build/default/production/_ext/1472/cbuffer.o
+ .debug_info      0x000000        0x570 build/default/production/_ext/1445274692/frame.o
+ .debug_info      0x000570        0x195 build/default/production/_ext/1472/main.o
+ .debug_info      0x000705        0xd3b build/default/production/_ext/1445274692/dispatch.o
+ .debug_info      0x001440        0xc1c build/default/production/_ext/1472/uart.o
+ .debug_info      0x00205c        0x604 build/default/production/_ext/1472/cbuffer.o
  *(.gnu.linkonce.wi.*)
 
-.debug_abbrev     0x000000        0x53d
+.debug_abbrev     0x000000        0x578
  *(.debug_abbrev)
- .debug_abbrev    0x000000        0x108 build/default/production/_ext/1445274692/frame.o
- .debug_abbrev    0x000108         0x4b build/default/production/_ext/1472/main.o
- .debug_abbrev    0x000153        0x171 build/default/production/_ext/1445274692/dispatch.o
- .debug_abbrev    0x0002c4        0x187 build/default/production/_ext/1472/uart.o
- .debug_abbrev    0x00044b         0xf2 build/default/production/_ext/1472/cbuffer.o
+ .debug_abbrev    0x000000        0x103 build/default/production/_ext/1445274692/frame.o
+ .debug_abbrev    0x000103         0x7b build/default/production/_ext/1472/main.o
+ .debug_abbrev    0x00017e        0x181 build/default/production/_ext/1445274692/dispatch.o
+ .debug_abbrev    0x0002ff        0x187 build/default/production/_ext/1472/uart.o
+ .debug_abbrev    0x000486         0xf2 build/default/production/_ext/1472/cbuffer.o
 
-.debug_line       0x000000       0x1c15
+.debug_line       0x000000       0x1c3b
  *(.debug_line)
- .debug_line      0x000000        0x4b9 build/default/production/_ext/1445274692/frame.o
- .debug_line      0x0004b9         0x95 build/default/production/_ext/1472/main.o
- .debug_line      0x00054e        0xec7 build/default/production/_ext/1445274692/dispatch.o
- .debug_line      0x001415        0x2d6 build/default/production/_ext/1472/uart.o
- .debug_line      0x0016eb        0x52a build/default/production/_ext/1472/cbuffer.o
+ .debug_line      0x000000        0x475 build/default/production/_ext/1445274692/frame.o
+ .debug_line      0x000475        0x12c build/default/production/_ext/1472/main.o
+ .debug_line      0x0005a1        0xe9a build/default/production/_ext/1445274692/dispatch.o
+ .debug_line      0x00143b        0x2d6 build/default/production/_ext/1472/uart.o
+ .debug_line      0x001711        0x52a build/default/production/_ext/1472/cbuffer.o
 
-.debug_frame      0x000000        0x374
+.debug_frame      0x000000        0x378
  *(.debug_frame)
- .debug_frame     0x000000         0xb4 build/default/production/_ext/1445274692/frame.o
- .debug_frame     0x0000b4         0x34 build/default/production/_ext/1472/main.o
- .debug_frame     0x0000e8        0x154 build/default/production/_ext/1445274692/dispatch.o
- .debug_frame     0x00023c         0x84 build/default/production/_ext/1472/uart.o
- .debug_frame     0x0002c0         0xb4 build/default/production/_ext/1472/cbuffer.o
+ .debug_frame     0x000000         0x94 build/default/production/_ext/1445274692/frame.o
+ .debug_frame     0x000094         0x68 build/default/production/_ext/1472/main.o
+ .debug_frame     0x0000fc        0x144 build/default/production/_ext/1445274692/dispatch.o
+ .debug_frame     0x000240         0x84 build/default/production/_ext/1472/uart.o
+ .debug_frame     0x0002c4         0xb4 build/default/production/_ext/1472/cbuffer.o
 
-.debug_str        0x000000        0x12d
+.debug_str        0x000000        0x119
  *(.debug_str)
- .debug_str       0x000000         0x87 build/default/production/_ext/1445274692/frame.o
- .debug_str       0x000087         0x52 build/default/production/_ext/1445274692/dispatch.o
- .debug_str       0x0000d9         0x37 build/default/production/_ext/1472/uart.o
- .debug_str       0x000110         0x1d build/default/production/_ext/1472/cbuffer.o
+ .debug_str       0x000000         0x73 build/default/production/_ext/1445274692/frame.o
+ .debug_str       0x000073         0x52 build/default/production/_ext/1445274692/dispatch.o
+ .debug_str       0x0000c5         0x37 build/default/production/_ext/1472/uart.o
+ .debug_str       0x0000fc         0x1d build/default/production/_ext/1472/cbuffer.o
 
 .debug_loc
  *(.debug_loc)
@@ -426,18 +421,18 @@ __FICD
  *(.debug_macinfo)
 
 .debug_pubnames
-                  0x000000        0x478
+                  0x000000        0x438
  *(.debug_pubnames)
  .debug_pubnames
-                  0x000000        0x16b build/default/production/_ext/1445274692/frame.o
+                  0x000000        0x12c build/default/production/_ext/1445274692/frame.o
  .debug_pubnames
-                  0x00016b         0x2c build/default/production/_ext/1472/main.o
+                  0x00012c         0x45 build/default/production/_ext/1472/main.o
  .debug_pubnames
-                  0x000197        0x1ab build/default/production/_ext/1445274692/dispatch.o
+                  0x000171        0x191 build/default/production/_ext/1445274692/dispatch.o
  .debug_pubnames
-                  0x000342         0x88 build/default/production/_ext/1472/uart.o
+                  0x000302         0x88 build/default/production/_ext/1472/uart.o
  .debug_pubnames
-                  0x0003ca         0xae build/default/production/_ext/1472/cbuffer.o
+                  0x00038a         0xae build/default/production/_ext/1472/cbuffer.o
 
 .debug_ranges
  *(.debug_ranges)
@@ -475,8 +470,8 @@ __FICD
                   0x000024          0x4 LONG 0x2ae DEFINED (__CCT2Interrupt)?ABSOLUTE (__CCT2Interrupt):ABSOLUTE (__DefaultInterrupt)
                   0x000026          0x4 LONG 0x2ae DEFINED (__Interrupt9)?ABSOLUTE (__Interrupt9):ABSOLUTE (__DefaultInterrupt)
                   0x000028          0x4 LONG 0x2ae DEFINED (__Interrupt10)?ABSOLUTE (__Interrupt10):ABSOLUTE (__DefaultInterrupt)
-                  0x00002a          0x4 LONG 0x1ca6 DEFINED (__U1RXInterrupt)?ABSOLUTE (__U1RXInterrupt):ABSOLUTE (__DefaultInterrupt)
-                  0x00002c          0x4 LONG 0x1c5e DEFINED (__U1TXInterrupt)?ABSOLUTE (__U1TXInterrupt):ABSOLUTE (__DefaultInterrupt)
+                  0x00002a          0x4 LONG 0x1c8c DEFINED (__U1RXInterrupt)?ABSOLUTE (__U1RXInterrupt):ABSOLUTE (__DefaultInterrupt)
+                  0x00002c          0x4 LONG 0x1c44 DEFINED (__U1TXInterrupt)?ABSOLUTE (__U1TXInterrupt):ABSOLUTE (__DefaultInterrupt)
                   0x00002e          0x4 LONG 0x2ae DEFINED (__ADC1Interrupt)?ABSOLUTE (__ADC1Interrupt):ABSOLUTE (__DefaultInterrupt)
                   0x000030          0x4 LONG 0x2ae DEFINED (__Interrupt14)?ABSOLUTE (__Interrupt14):ABSOLUTE (__DefaultInterrupt)
                   0x000032          0x4 LONG 0x2ae DEFINED (__NVMInterrupt)?ABSOLUTE (__NVMInterrupt):ABSOLUTE (__DefaultInterrupt)
@@ -603,8 +598,8 @@ __FICD
                   0x000124          0x4 LONG 0x2ae DEFINED (__AltCCT2Interrupt)?ABSOLUTE (__AltCCT2Interrupt):DEFINED (__CCT2Interrupt)?ABSOLUTE (__CCT2Interrupt):ABSOLUTE (__DefaultInterrupt)
                   0x000126          0x4 LONG 0x2ae DEFINED (__AltInterrupt9)?ABSOLUTE (__AltInterrupt9):DEFINED (__Interrupt9)?ABSOLUTE (__Interrupt9):ABSOLUTE (__DefaultInterrupt)
                   0x000128          0x4 LONG 0x2ae DEFINED (__AltInterrupt10)?ABSOLUTE (__AltInterrupt10):DEFINED (__Interrupt10)?ABSOLUTE (__Interrupt10):ABSOLUTE (__DefaultInterrupt)
-                  0x00012a          0x4 LONG 0x1ca6 DEFINED (__AltU1RXInterrupt)?ABSOLUTE (__AltU1RXInterrupt):DEFINED (__U1RXInterrupt)?ABSOLUTE (__U1RXInterrupt):ABSOLUTE (__DefaultInterrupt)
-                  0x00012c          0x4 LONG 0x1c5e DEFINED (__AltU1TXInterrupt)?ABSOLUTE (__AltU1TXInterrupt):DEFINED (__U1TXInterrupt)?ABSOLUTE (__U1TXInterrupt):ABSOLUTE (__DefaultInterrupt)
+                  0x00012a          0x4 LONG 0x1c8c DEFINED (__AltU1RXInterrupt)?ABSOLUTE (__AltU1RXInterrupt):DEFINED (__U1RXInterrupt)?ABSOLUTE (__U1RXInterrupt):ABSOLUTE (__DefaultInterrupt)
+                  0x00012c          0x4 LONG 0x1c44 DEFINED (__AltU1TXInterrupt)?ABSOLUTE (__AltU1TXInterrupt):DEFINED (__U1TXInterrupt)?ABSOLUTE (__U1TXInterrupt):ABSOLUTE (__DefaultInterrupt)
                   0x00012e          0x4 LONG 0x2ae DEFINED (__AltADC1Interrupt)?ABSOLUTE (__AltADC1Interrupt):DEFINED (__ADC1Interrupt)?ABSOLUTE (__ADC1Interrupt):ABSOLUTE (__DefaultInterrupt)
                   0x000130          0x4 LONG 0x2ae DEFINED (__AltInterrupt14)?ABSOLUTE (__AltInterrupt14):DEFINED (__Interrupt14)?ABSOLUTE (__Interrupt14):ABSOLUTE (__DefaultInterrupt)
                   0x000132          0x4 LONG 0x2ae DEFINED (__AltNVMInterrupt)?ABSOLUTE (__AltNVMInterrupt):DEFINED (__NVMInterrupt)?ABSOLUTE (__NVMInterrupt):ABSOLUTE (__DefaultInterrupt)
@@ -1475,128 +1470,150 @@ LOAD default_isr
 LOAD data_init
 
 .debug_pubtypes
-                  0x000078        0x29a
+                  0x000078        0x2a6
  .debug_pubtypes
                   0x000078         0x4d build/default/production/_ext/1445274692/frame.o
  .debug_pubtypes
-                  0x0000c5         0x12 build/default/production/_ext/1472/main.o
+                  0x0000c5         0x1e build/default/production/_ext/1472/main.o
  .debug_pubtypes
-                  0x0000d7         0xac build/default/production/_ext/1445274692/dispatch.o
+                  0x0000e3         0xac build/default/production/_ext/1445274692/dispatch.o
  .debug_pubtypes
-                  0x000183        0x107 build/default/production/_ext/1472/uart.o
+                  0x00018f        0x107 build/default/production/_ext/1472/uart.o
  .debug_pubtypes
-                  0x00028a         0x88 build/default/production/_ext/1472/cbuffer.o
+                  0x000296         0x88 build/default/production/_ext/1472/cbuffer.o
 
 __c30_signature
-                  0x000312         0x60
+                  0x00031e         0x60
  __c30_signature
-                  0x000312          0x6 build/default/production/_ext/1445274692/frame.o
+                  0x00031e          0x6 build/default/production/_ext/1445274692/frame.o
  __c30_signature
-                  0x000318          0x6 build/default/production/_ext/1472/main.o
+                  0x000324          0x6 build/default/production/_ext/1472/main.o
  __c30_signature
-                  0x00031e          0x6 build/default/production/_ext/1445274692/dispatch.o
+                  0x00032a          0x6 build/default/production/_ext/1445274692/dispatch.o
  __c30_signature
-                  0x000324          0x6 build/default/production/_ext/1472/uart.o
+                  0x000330          0x6 build/default/production/_ext/1472/uart.o
  __c30_signature
-                  0x00032a          0x6 build/default/production/_ext/1472/cbuffer.o
+                  0x000336          0x6 build/default/production/_ext/1472/cbuffer.o
  __c30_signature
-                  0x000330          0x6 c:/program files (x86)/microchip/xc16/v1.25/bin/bin/../../lib\liblega-pic30-elf.a(crt0_standard.o)
+                  0x00033c          0x6 c:/program files (x86)/microchip/xc16/v1.25/bin/bin/../../lib\liblega-pic30-elf.a(crt0_standard.o)
  __c30_signature
-                  0x000336          0x6 c:/program files (x86)/microchip/xc16/v1.25/bin/bin/../../lib\liblega-pic30-elf.a(data_init_standard.o)
+                  0x000342          0x6 c:/program files (x86)/microchip/xc16/v1.25/bin/bin/../../lib\liblega-pic30-elf.a(data_init_standard.o)
  __c30_signature
-                  0x00033c          0x6 c:/program files (x86)/microchip/xc16/v1.25/bin/bin/../../lib\liblega-c-elf.a(strcmp.XXeo)
+                  0x000348          0x6 c:/program files (x86)/microchip/xc16/v1.25/bin/bin/../../lib\liblega-c-elf.a(strcmp.XXeo)
  __c30_signature
-                  0x000342          0x6 c:/program files (x86)/microchip/xc16/v1.25/bin/bin/../../lib\liblega-c-elf.a(strlen.XXeo)
+                  0x00034e          0x6 c:/program files (x86)/microchip/xc16/v1.25/bin/bin/../../lib\liblega-c-elf.a(strlen.XXeo)
  __c30_signature
-                  0x000348          0x6 c:/program files (x86)/microchip/xc16/v1.25/bin/bin/../../lib\liblega-c-elf.a(xstoul.XXeo)
+                  0x000354          0x6 c:/program files (x86)/microchip/xc16/v1.25/bin/bin/../../lib\liblega-c-elf.a(xstoul.XXeo)
  __c30_signature
-                  0x00034e          0x6 c:/program files (x86)/microchip/xc16/v1.25/bin/bin/../../lib\liblega-c-elf.a(isspace.XXelso)
+                  0x00035a          0x6 c:/program files (x86)/microchip/xc16/v1.25/bin/bin/../../lib\liblega-c-elf.a(isspace.XXelso)
  __c30_signature
-                  0x000354          0x6 c:/program files (x86)/microchip/xc16/v1.25/bin/bin/../../lib\liblega-c-elf.a(tolower.XXelso)
+                  0x000360          0x6 c:/program files (x86)/microchip/xc16/v1.25/bin/bin/../../lib\liblega-c-elf.a(tolower.XXelso)
  __c30_signature
-                  0x00035a          0x6 c:/program files (x86)/microchip/xc16/v1.25/bin/bin/../../lib\liblega-c-elf.a(errno.XXelo)
+                  0x000366          0x6 c:/program files (x86)/microchip/xc16/v1.25/bin/bin/../../lib\liblega-c-elf.a(errno.XXelo)
  __c30_signature
-                  0x000360          0x6 c:/program files (x86)/microchip/xc16/v1.25/bin/bin/../../lib\liblega-c-elf.a(memchr.XXeo)
+                  0x00036c          0x6 c:/program files (x86)/microchip/xc16/v1.25/bin/bin/../../lib\liblega-c-elf.a(memchr.XXeo)
  __c30_signature
-                  0x000366          0x6 c:/program files (x86)/microchip/xc16/v1.25/bin/bin/../../lib\libm-elf.a(udivsi3.eo)
+                  0x000372          0x6 c:/program files (x86)/microchip/xc16/v1.25/bin/bin/../../lib\libm-elf.a(udivsi3.eo)
  __c30_signature
-                  0x00036c          0x6 c:/program files (x86)/microchip/xc16/v1.25/bin/bin/../../lib\libm-elf.a(mulsi3.eo)
+                  0x000378          0x6 c:/program files (x86)/microchip/xc16/v1.25/bin/bin/../../lib\libm-elf.a(mulsi3.eo)
 
-.nbss               0x0800        0x2ec
+.nbss               0x0800        0x2ea
  .nbss              0x0800        0x168 build/default/production/_ext/1445274692/dispatch.o
  .nbss              0x0968        0x138 build/default/production/_ext/1472/uart.o
- .nbss              0x0aa0         0x4c build/default/production/_ext/1445274692/frame.o
-                    0x0ae2                  _channelInitFunctPtr
-                    0x0ae4                  _channelReadableFunctPtr
-                    0x0ae6                  _channelWriteableFunctPtr
-                    0x0ae8                  _channelReadFunctPtr
-                    0x0aea                  _channelWriteFunctPtr
+ .nbss              0x0aa0         0x4a build/default/production/_ext/1445274692/frame.o
+                    0x0ae2                  _channelReadableFunctPtr
+                    0x0ae4                  _channelWriteableFunctPtr
+                    0x0ae6                  _channelReadFunctPtr
+                    0x0ae8                  _channelWriteFunctPtr
 
-.data               0x0aec         0x4a
- .data              0x0aec         0x4a c:/program files (x86)/microchip/xc16/v1.25/bin/bin/../../lib\liblega-c-elf.a(xstoul.XXeo)
+.data               0x0aea         0x4a
+ .data              0x0aea         0x4a c:/program files (x86)/microchip/xc16/v1.25/bin/bin/../../lib\liblega-c-elf.a(xstoul.XXeo)
 
-.bss                0x0b36          0x4
- .bss               0x0b36          0x4 c:/program files (x86)/microchip/xc16/v1.25/bin/bin/../../lib\liblega-c-elf.a(errno.XXelo)
-                    0x0b36                  _errno
-                    0x0b38                  __Tls_setup_errno
+.bss                0x0b34          0x4
+ .bss               0x0b34          0x4 c:/program files (x86)/microchip/xc16/v1.25/bin/bin/../../lib\liblega-c-elf.a(errno.XXelo)
+                    0x0b34                  _errno
+                    0x0b36                  __Tls_setup_errno
 
-.text             0x00047c       0x186a
- .text            0x00047c        0xff6 build/default/production/_ext/1445274692/dispatch.o
-                  0x00047c                  _DIS_init
-                  0x0004b2                  _DIS_publish
-                  0x000930                  _publish_str
-                  0x00097c                  _publish_u8
-                  0x0009d4                  _publish_s8
-                  0x000a2e                  _publish_u16
-                  0x000ab4                  _publish_s16
-                  0x000b3a                  _publish_u32
-                  0x000c38                  _publish_s32
-                  0x000d36                  _getCurrentMessageWidth
-                  0x000dc8                  _DIS_subscribe
-                  0x000e40                  _DIS_unsubscribe
-                  0x000e86                  _DIS_process
-                  0x001082                  _DIS_getElements
-                  0x0013a2                  _getCurrentRxPointerIndex
-                  0x001436                  _DIS_assignChannelInit
-                  0x001442                  _DIS_assignChannelReadable
-                  0x00144e                  _DIS_assignChannelWriteable
-                  0x00145a                  _DIS_assignChannelRead
-                  0x001466                  _DIS_assignChannelWrite
- .text            0x001472        0x3d8 build/default/production/_ext/1472/cbuffer.o
-                  0x001472                  _BUF_init
-                  0x00152c                  _BUF_status
-                  0x001568                  _BUF_emptySlots
-                  0x0015c2                  _BUF_fullSlots
-                  0x00161c                  _BUF_write8
-                  0x001676                  _BUF_write16
-                  0x0016d2                  _BUF_write32
-                  0x001732                  _BUF_read8
-                  0x00178c                  _BUF_read16
-                  0x0017ea                  _BUF_read32
- .text            0x00184a        0x302 build/default/production/_ext/1445274692/frame.o
-                  0x00184a                  _FRM_init
-                  0x001854                  _FRM_push
-                  0x0018be                  _FRM_pushByte
-                  0x00190a                  _FRM_pull
-                  0x001ab6                  _FRM_fletcher16
-                  0x001b10                  _FRM_assignChannelInit
-                  0x001b1c                  _FRM_assignChannelReadable
-                  0x001b28                  _FRM_assignChannelWriteable
-                  0x001b34                  _FRM_assignChannelRead
-                  0x001b40                  _FRM_assignChannelWrite
- .text            0x001b4c        0x19a build/default/production/_ext/1472/uart.o
-                  0x001b4c                  _UART_init
-                  0x001bba                  _UART_read
-                  0x001bf4                  _UART_write
-                  0x001c46                  _UART_readable
-                  0x001c52                  _UART_writeable
-                  0x001c5e                  __U1TXInterrupt
-                  0x001ca6                  __U1RXInterrupt
+.config_ICS       0xf8000e          0x2
+ .config_ICS      0xf8000e          0x2 build/default/production/_ext/1472/main.o
 
-.dinit            0x001ce6         0x52
- .dinit           0x001ce6         0x52 data_init
+.config_MCLRE     0xf8000c          0x2
+ .config_MCLRE    0xf8000c          0x2 build/default/production/_ext/1472/main.o
 
-.text             0x001d38         0x20
- .text            0x001d38         0x20 build/default/production/_ext/1472/main.o
-                  0x001d38                  _main
+.config_WINDIS    0xf8000a          0x2
+ .config_WINDIS
+                  0xf8000a          0x2 build/default/production/_ext/1472/main.o
+
+.config_FCKSM     0xf80008          0x2
+ .config_FCKSM    0xf80008          0x2 build/default/production/_ext/1472/main.o
+
+.config_IESO      0xf80006          0x2
+ .config_IESO     0xf80006          0x2 build/default/production/_ext/1472/main.o
+
+.config_GCP       0xf80004          0x2
+ .config_GCP      0xf80004          0x2 build/default/production/_ext/1472/main.o
+
+.config_BSS       0xf80000          0x2
+ .config_BSS      0xf80000          0x2 build/default/production/_ext/1472/main.o
+
+.const              0x847c         0x12 load address 0x00047c  
+ .const             0x847c         0x12 build/default/production/_ext/1472/main.o
+
+.text             0x00048e       0x183e
+ .text            0x00048e        0xfe8 build/default/production/_ext/1445274692/dispatch.o
+                  0x00048e                  _DIS_init
+                  0x0004c2                  _DIS_publish
+                  0x000940                  _publish_str
+                  0x00098c                  _publish_u8
+                  0x0009e4                  _publish_s8
+                  0x000a3e                  _publish_u16
+                  0x000ac4                  _publish_s16
+                  0x000b4a                  _publish_u32
+                  0x000c48                  _publish_s32
+                  0x000d46                  _getCurrentMessageWidth
+                  0x000dd8                  _DIS_subscribe
+                  0x000e50                  _DIS_unsubscribe
+                  0x000e96                  _DIS_process
+                  0x001092                  _DIS_getElements
+                  0x0013b2                  _getCurrentRxPointerIndex
+                  0x001446                  _DIS_assignChannelReadable
+                  0x001452                  _DIS_assignChannelWriteable
+                  0x00145e                  _DIS_assignChannelRead
+                  0x00146a                  _DIS_assignChannelWrite
+ .text            0x001476        0x3d8 build/default/production/_ext/1472/cbuffer.o
+                  0x001476                  _BUF_init
+                  0x001530                  _BUF_status
+                  0x00156c                  _BUF_emptySlots
+                  0x0015c6                  _BUF_fullSlots
+                  0x001620                  _BUF_write8
+                  0x00167a                  _BUF_write16
+                  0x0016d6                  _BUF_write32
+                  0x001736                  _BUF_read8
+                  0x001790                  _BUF_read16
+                  0x0017ee                  _BUF_read32
+ .text            0x00184e        0x2ec build/default/production/_ext/1445274692/frame.o
+                  0x00184e                  _FRM_push
+                  0x0018b8                  _FRM_pushByte
+                  0x001904                  _FRM_pull
+                  0x001ab0                  _FRM_fletcher16
+                  0x001b0a                  _FRM_assignChannelReadable
+                  0x001b16                  _FRM_assignChannelWriteable
+                  0x001b22                  _FRM_assignChannelRead
+                  0x001b2e                  _FRM_assignChannelWrite
+ .text            0x001b3a        0x192 build/default/production/_ext/1472/uart.o
+                  0x001b3a                  _UART_init
+                  0x001ba8                  _UART_read
+                  0x001bde                  _UART_write
+                  0x001c2c                  _UART_readable
+                  0x001c38                  _UART_writeable
+                  0x001c44                  __U1TXInterrupt
+                  0x001c8c                  __U1RXInterrupt
+
+.dinit            0x001ccc         0x52
+ .dinit           0x001ccc         0x52 data_init
+
+.text             0x001d1e         0x40
+ .text            0x001d1e         0x40 build/default/production/_ext/1472/main.o
+                  0x001d1e                  _main
                   0x001d3e                  _initDispatch
+                  0x001d58                  _mySubscriberFunction
