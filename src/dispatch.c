@@ -58,8 +58,6 @@ void DIS_init(void){
         sub[i].subFunctPtr = 0;
         sub[i].topic[0] = 0;    // terminate the string
     }
-    
-    FRM_init();
 }
 
 void DIS_publish(const char* topic, ...){
@@ -740,10 +738,6 @@ uint16_t getCurrentRxPointerIndex(uint8_t element){
     }
     
     return currentIndex;
-}
-
-void DIS_assignChannelInit(void (*functPtr)()){
-    FRM_assignChannelInit(functPtr);
 }
 
 void DIS_assignChannelReadable(uint16_t (*functPtr)()){

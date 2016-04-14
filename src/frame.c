@@ -14,8 +14,8 @@ uint16_t FRM_fletcher16(uint8_t* data, size_t bytes);
 
 uint16_t (*channelReadableFunctPtr)();
 uint16_t (*channelWriteableFunctPtr)();
-void (*channelReadFunctPtr)();
-void (*channelWriteFunctPtr)(void* data, uint32_t length);
+void (*channelReadFunctPtr)(void* data, uint16_t length);
+void (*channelWriteFunctPtr)(void* data, uint16_t length);
 
 void FRM_push(uint8_t* data, uint16_t length){
     int16_t i = 0;
@@ -177,10 +177,10 @@ void FRM_assignChannelWriteable(uint16_t (*functPtr)()){
     channelWriteableFunctPtr = functPtr;
 }
 
-void FRM_assignChannelRead(void (*functPtr)(void* data, uint32_t length)){
+void FRM_assignChannelRead(void (*functPtr)(void* data, uint16_t length)){
     channelReadFunctPtr = functPtr;
 }
 
-void FRM_assignChannelWrite(void (*functPtr)(void* data, uint32_t length)){
+void FRM_assignChannelWrite(void (*functPtr)(void* data, uint16_t length)){
     channelWriteFunctPtr = functPtr;
 }
