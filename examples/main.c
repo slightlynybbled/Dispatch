@@ -5,14 +5,18 @@
 #include "config.h"
 
 void initDispatch(void);
+void mySubscriberFunction(void);
 
 int main(void){
     /* initialize the communication channels */
     initDispatch();
     
-    /* send a single dispatch */
+    /* subscribe to the topic 'foo' */
+    DIS_subscribe("foo", &mySubscriberFunction);
+    
+    /* send a single dispatch consisting of 4 data points */
     uint8_t data[] = {1, 2, 3, 4};
-    DIS_publish("test:4,u8", data);
+    DIS_publish("bar:4,u8", data);
     
     /* forever loop */
     while(1){
@@ -34,4 +38,8 @@ void initDispatch(void){
     DIS_assignChannelWrite(&UART_write);
     
     DIS_init();
+}
+
+void mySubscriberFunction(void){
+    
 }
