@@ -16,7 +16,7 @@ cases within the next couple of weeks.
 
 # Example Usage #
 
-    :::c
+    #!c
     uint8_t myData[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
     DIS_publish("topic:10,u8", myData);
     
