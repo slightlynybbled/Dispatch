@@ -41,5 +41,10 @@ void initDispatch(void){
 }
 
 void mySubscriberFunction(void){
+    static uint16_t i = 0;
     
+    i++;
+    
+    /* publish i back to the sender to 'close the loop' */
+    DIS_publish("i,u16", &i);
 }
