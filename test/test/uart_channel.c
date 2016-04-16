@@ -10,7 +10,6 @@ uint8_t writeData[WRITE_DATA_LENGTH] = {0};
 uint8_t readData[READ_DATA_LENGTH] = {0};
 
 void channel_reset(void){
-    printf("_________________\n");
     readableIndex = 0;
     writeableIndex = 0;
     
@@ -54,8 +53,4 @@ void write8(void* data, uint16_t length){
     }
     
     writeableIndex += length;
-    
-    for(i = 0; i < writeableIndex; i++){
-        printf("%d: (%d, %d)\n", writeableIndex, i, writeData[i]);
-    }
 }
