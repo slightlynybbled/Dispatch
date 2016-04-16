@@ -1,3 +1,5 @@
+
+
 # Purpose #
 
 Dispatch is intended as an easy-to-use serial library that allows a simple exchange
@@ -11,8 +13,12 @@ More details may be found at [for(embed)](http://www.forembed.com).
 
 # Project Maturity #
 
-The project is new and has not been fully tested nor optimized.  I expect to add test
-cases within the next couple of weeks.
+The project is new and has not been fully tested nor optimized.  I have integrated TravisCI into
+the workflow so that any commits contributed already has the test environment set up.  Currently,
+testing exists for about 10% of the functionality of the project.  I will continue to add test
+cases in the coming weeks.
+
+![travisci](https://travis-ci.org/slightlynybbled/Dispatch.svg?branch=master)
 
 # Example Usage #
 
