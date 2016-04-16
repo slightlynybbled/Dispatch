@@ -82,14 +82,19 @@ void test_mock_read(void){
     }
 }
 
-void test_send_10(void)
+void test_push_byte_normal(void)
 {
-    uint8_t dataIn[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
-    uint8_t dataTest[WRITE_DATA_LENGTH] = { START_OF_FRAME, 
-                                            0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 
-                                            END_OF_FRAME};
+    uint8_t data = 10;
+    FRM_pushByte(data);
     
-    FRM_push(dataIn, 10);
+    TEST_ASSERT_EQUAL_INT(data, writeData[0]);
+}
+
+void test_push_byte_SOF(void)
+{
+    uint8_t data = START_OF_FRAME;
+    FRM_pushByte(data);
     
-    TEST_ASSERT_EQUAL_INT(dataTest[0], writeData[0]);
+    TEST_ASSERT_EQUAL_INT(ESC, writeData[0]);
+    TEST_ASSERT_EQUAL_INT(START_OF_FRAME ^ ESC_XOR, writeData[1]);
 }
