@@ -1,6 +1,6 @@
 #include "unity.h"
 #include "frame.c"
-#include "mock_channel.c"
+#include "uart_channel.c"
 
 #define BUFFER_ARRAY_LENGTH 8
 
@@ -45,17 +45,32 @@ void test_init_write(void)
 
 void test_mock_readable(void)
 {
-    channel_reset();
     TEST_ASSERT_EQUAL_INT(0, readable());
 }
 
 void test_mock_writeable(void)
 {
-    channel_reset();
     TEST_ASSERT_EQUAL_INT(WRITE_DATA_LENGTH, writeable());
 }
 
-void test_mock_write(void){
+void test_push_byte_normal(void)
+{
+    uint8_t data = 10;
+    FRM_pushByte(data);
+    
+    TEST_ASSERT_EQUAL_INT(data, writeData[0]);
+}
+
+void test_push_byte_SOF(void)
+{
+    uint8_t data = START_OF_FRAME;
+    FRM_pushByte(data);
+    
+    TEST_ASSERT_EQUAL_INT(ESC, writeData[0]);
+    TEST_ASSERT_EQUAL_INT(START_OF_FRAME ^ ESC_XOR, writeData[1]);
+}
+
+/*void test_mock_write(void){
     uint8_t dataIn[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
     
     write8(dataIn, 10);
@@ -80,21 +95,4 @@ void test_mock_read(void){
     for(i = 0; i < 10; i++){
         TEST_ASSERT_EQUAL_INT(dataIn[i], dataOut[i]);
     }
-}
-
-void test_push_byte_normal(void)
-{
-    uint8_t data = 10;
-    FRM_pushByte(data);
-    
-    TEST_ASSERT_EQUAL_INT(data, writeData[0]);
-}
-
-void test_push_byte_SOF(void)
-{
-    uint8_t data = START_OF_FRAME;
-    FRM_pushByte(data);
-    
-    TEST_ASSERT_EQUAL_INT(ESC, writeData[0]);
-    TEST_ASSERT_EQUAL_INT(START_OF_FRAME ^ ESC_XOR, writeData[1]);
-}
+}*/
