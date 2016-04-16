@@ -70,18 +70,59 @@ void test_push_byte_SOF(void)
     TEST_ASSERT_EQUAL_INT(START_OF_FRAME ^ ESC_XOR, writeData[1]);
 }
 
-/*void test_mock_write(void){
-    uint8_t dataIn[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+void test_push_byte_EOF(void)
+{
+    uint8_t data = END_OF_FRAME;
+    FRM_pushByte(data);
     
-    write8(dataIn, 10);
+    TEST_ASSERT_EQUAL_INT(ESC, writeData[0]);
+    TEST_ASSERT_EQUAL_INT(END_OF_FRAME ^ ESC_XOR, writeData[1]);
+}
+
+void test_push_byte_ESC(void)
+{
+    uint8_t data = ESC;
+    FRM_pushByte(data);
+    
+    TEST_ASSERT_EQUAL_INT(ESC, writeData[0]);
+    TEST_ASSERT_EQUAL_INT(ESC ^ ESC_XOR, writeData[1]);
+}
+
+void test_mock_frame_write(void){
+    uint8_t dataIn[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+    uint8_t dataTest[] = {  START_OF_FRAME, 
+                            0, 1, 2, 3, 4, 5, 6, 7, 8, 9,
+                            45, 165,
+                            END_OF_FRAME};
+    
+    FRM_push(dataIn, 10);
     
     int i;
-    for(i = 0; i < 10; i++){
-        TEST_ASSERT_EQUAL_INT(dataIn[i], writeData[i]);
+    for(i = 0; i < 14; i++){
+        TEST_ASSERT_EQUAL_INT(dataTest[i], writeData[i]);
     }
 }
 
-void test_mock_read(void){
+void test_mock_write_esc(void){
+    uint8_t dataIn[] = {0, START_OF_FRAME, 2, END_OF_FRAME, 4, ESC, 6, 7, 8, 9};
+    uint8_t dataTest[] = {  START_OF_FRAME,
+                            0, ESC, START_OF_FRAME ^ ESC_XOR,
+                            2, ESC, END_OF_FRAME ^ ESC_XOR,
+                            4, ESC, ESC ^ ESC_XOR,
+                            6, 7, 8, 9,
+                            146, 117, 
+                            END_OF_FRAME};
+    
+    FRM_push(dataIn, 10);
+    
+    int i;
+    for(i = 0; i < 17; i++){
+        TEST_ASSERT_EQUAL_INT(dataTest[i], writeData[i]);
+        printf("%d, %d\n", dataTest[i], writeData[i]);
+    }
+}
+
+/*void test_mock_read(void){
     uint8_t dataIn[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
     uint8_t dataOut[READ_DATA_LENGTH] = {0};
     
