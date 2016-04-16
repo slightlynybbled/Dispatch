@@ -1,8 +1,8 @@
 #include "frame.h"
 #include <stddef.h>
 
-#define SOF 0xf7
-#define EOF 0x7f
+#define START_OF_FRAME 0xf7
+#define END_OF_FRAME 0x7f
 #define ESC 0xf6
 #define ESC_XOR 0x20
 
@@ -25,9 +25,9 @@ void FRM_push(uint8_t* data, uint16_t length){
     uint8_t check0 = (uint8_t)(check & 0x00ff);
     uint8_t check1 = (uint8_t)((check & 0xff00) >> 8);
     
-    /* wait for send buffer to clear, then write the SOF */
+    /* wait for send buffer to clear, then write the START_OF_FRAME */
     while((*channelWriteableFunctPtr)() == 0);
-    dataToSend = SOF;
+    dataToSend = START_OF_FRAME;
     channelWriteFunctPtr(&dataToSend, 1);
     
     /* copy the data from data to the txFrame */
@@ -38,9 +38,9 @@ void FRM_push(uint8_t* data, uint16_t length){
     FRM_pushByte(check0);
     FRM_pushByte(check1);
     
-    /* wait for send buffer to clear, then write the SOF */
+    /* wait for send buffer to clear, then write the START_OF_FRAME */
     while(channelWriteableFunctPtr() == 0);
-    dataToSend = EOF;
+    dataToSend = END_OF_FRAME;
     channelWriteFunctPtr(&dataToSend, 1);
 }
 
@@ -49,7 +49,7 @@ void FRM_pushByte(uint8_t data){
     while(channelWriteableFunctPtr() < 2);
     
     /* add proper escape sequences */
-    if((data == SOF) || (data == EOF) || (data == ESC)){
+    if((data == START_OF_FRAME) || (data == END_OF_FRAME) || (data == ESC)){
         uint8_t escChar = ESC;
         uint8_t escData = data ^ ESC_XOR;
         channelWriteFunctPtr(&escChar, 1);
@@ -70,21 +70,21 @@ uint16_t FRM_pull(uint8_t* data){
     channelReadFunctPtr(&rxFrame[rxFrameIndex], numOfBytes);
     rxFrameIndex += numOfBytes;
     
-    /* find the SOF */
+    /* find the START_OF_FRAME */
     while(i < RX_FRAME_LENGTH){
-        if(rxFrame[i] == SOF){
+        if(rxFrame[i] == START_OF_FRAME){
             sofIndex = i;
             break;
         }else{
-            rxFrame[i] = 0; // clear the byte that isn't the SOF
+            rxFrame[i] = 0; // clear the byte that isn't the START_OF_FRAME
         }
         i++;
     }
     
-    /* find the EOF */
+    /* find the END_OF_FRAME */
     i = sofIndex;
     while(i < RX_FRAME_LENGTH){
-        if(rxFrame[i] == EOF){
+        if(rxFrame[i] == END_OF_FRAME){
             eofIndex = i;
             break;
         }
@@ -92,7 +92,7 @@ uint16_t FRM_pull(uint8_t* data){
     }
     
     /* ensure that the start of frame and the end of frame are both present */
-    if(((rxFrame[0] == SOF) || (sofIndex > 0)) && (eofIndex != 0)){
+    if(((rxFrame[0] == START_OF_FRAME) || (sofIndex > 0)) && (eofIndex != 0)){
         /* extract the received frame and shift the remainder of the
          * bytes into the beginning of the frame */
         i = 0;
@@ -112,13 +112,13 @@ uint16_t FRM_pull(uint8_t* data){
         
         length = i;
         
-        /* a full frame was just processed, find the next SOF and
+        /* a full frame was just processed, find the next START_OF_FRAME and
          * copy the remainder of the frame forward in preparation for
          * the next frame reception */
         i = eofIndex;
         sofIndex = 0;
         while(i < RX_FRAME_LENGTH){
-            if(rxFrame[i] == SOF){
+            if(rxFrame[i] == START_OF_FRAME){
                 sofIndex = i;
                 break;
             }else{
