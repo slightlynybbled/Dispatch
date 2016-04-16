@@ -1,32 +1,32 @@
-#define PUSHED_DATA_LENGTH 64
-#define PULLED_DATA_LENGTH 64
+#define WRITE_DATA_LENGTH 64
+#define READ_DATA_LENGTH 64
 
 uint16_t readableIndex = 0;
 uint16_t writeableIndex = 0;
 
-uint8_t writeData[PUSHED_DATA_LENGTH] = {0};
-uint8_t readData[PULLED_DATA_LENGTH] = {0};
+uint8_t writeData[WRITE_DATA_LENGTH] = {0};
+uint8_t readData[READ_DATA_LENGTH] = {0};
 
 void channel_reset(void){
     readableIndex = 0;
     writeableIndex = 0;
     
     int i;
-    for(i = 0; i < PUSHED_DATA_LENGTH; i++){
+    for(i = 0; i < WRITE_DATA_LENGTH; i++){
         writeData[i] = 0;
     }
     
-    for(i = 0; i < PULLED_DATA_LENGTH; i++){
+    for(i = 0; i < READ_DATA_LENGTH; i++){
         readData[i] = 0;
     }
 }
 
 uint16_t readable(void){
-    return PULLED_DATA_LENGTH - readableIndex;
+    return readableIndex;
 }
 
 uint16_t writeable(void){
-    return PUSHED_DATA_LENGTH - writeableIndex;
+    return WRITE_DATA_LENGTH - writeableIndex;
 }
 
 void read8(void* data, uint16_t length){
