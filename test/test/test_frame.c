@@ -122,6 +122,8 @@ void test_mock_write_esc(void){
     }
 }
 
+/* need to add read tests */
+
 /*void test_mock_read(void){
     uint8_t dataIn[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
     uint8_t dataOut[READ_DATA_LENGTH] = {0};
