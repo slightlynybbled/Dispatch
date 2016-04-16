@@ -118,11 +118,8 @@ void test_mock_write_esc(void){
     int i;
     for(i = 0; i < 17; i++){
         TEST_ASSERT_EQUAL_INT(dataTest[i], writeData[i]);
-        printf("%d, %d\n", dataTest[i], writeData[i]);
     }
 }
-
-/* need to add read tests */
 
 /*void test_mock_read(void){
     uint8_t dataIn[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
