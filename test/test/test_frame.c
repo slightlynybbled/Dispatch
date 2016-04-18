@@ -121,18 +121,90 @@ void test_mock_write_esc(void){
     }
 }
 
-/*void test_mock_read(void){
-    uint8_t dataIn[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
-    uint8_t dataOut[READ_DATA_LENGTH] = {0};
+void test_mock_read(void){
+    /* setup the mock uart channel */
+    uint8_t dataToReadData[] = {  START_OF_FRAME,
+                                0, ESC, START_OF_FRAME ^ ESC_XOR,
+                                2, ESC, END_OF_FRAME ^ ESC_XOR,
+                                4, ESC, ESC ^ ESC_XOR,
+                                6, 7, 8, 9,
+                                146, 117, 
+                                END_OF_FRAME};
+                                
+    uint8_t dataTest[] = {0, START_OF_FRAME, 2, END_OF_FRAME, 4, ESC, 6, 7, 8, 9};
+    uint8_t dataBuffer[READ_DATA_LENGTH] = {0};
     
-    int i;
-    for(i = 0; i < 10; i++){
-        readData[i] = dataIn[i];
+    uint16_t i;
+    for(i = 0; i < 17; i++){
+        readData[i] = dataToReadData[i];
     }
+    readableIndex = 17;
     
-    read8(dataOut, 10);
+    /* now that the uart channel is set up properly for a read,
+     * we can actually start the test */
+    uint16_t length = FRM_pull(dataBuffer);
+    
+    TEST_ASSERT_EQUAL_INT(10, length);
+    
+    for(i = 0; i < length; i++){
+        TEST_ASSERT_EQUAL_INT(dataTest[i], dataBuffer[i]);
+    }
+}
 
-    for(i = 0; i < 10; i++){
-        TEST_ASSERT_EQUAL_INT(dataIn[i], dataOut[i]);
+void test_mock_read_extra_bytes(void){
+    /* setup the mock uart channel */
+    uint8_t dataToReadData[] = {    10, 20, END_OF_FRAME,
+                                    START_OF_FRAME,
+                                    0, ESC, START_OF_FRAME ^ ESC_XOR,
+                                    2, ESC, END_OF_FRAME ^ ESC_XOR,
+                                    4, ESC, ESC ^ ESC_XOR,
+                                    6, 7, 8, 9,
+                                    146, 117, 
+                                    END_OF_FRAME, 
+                                    30, 40, START_OF_FRAME};
+                                
+    uint8_t dataTest[] = {0, START_OF_FRAME, 2, END_OF_FRAME, 4, ESC, 6, 7, 8, 9};
+    uint8_t dataBuffer[READ_DATA_LENGTH] = {0};
+    
+    uint16_t i;
+    for(i = 0; i < 23; i++){
+        readData[i] = dataToReadData[i];
     }
-}*/
+    readableIndex = 23;
+    
+    /* now that the uart channel is set up properly for a read,
+     * we can actually start the test */
+    uint16_t length = FRM_pull(dataBuffer);
+    
+    TEST_ASSERT_EQUAL_INT(10, length);
+    
+    for(i = 0; i < length; i++){
+        TEST_ASSERT_EQUAL_INT(dataTest[i], dataBuffer[i]);
+    }
+}
+
+void test_mock_read_fletcher_fail(void){
+    /* setup the mock uart channel */
+    uint8_t dataToReadData[] = {  START_OF_FRAME,
+                                0, ESC, START_OF_FRAME ^ ESC_XOR,
+                                2, ESC, END_OF_FRAME ^ ESC_XOR,
+                                4, ESC, ESC ^ ESC_XOR,
+                                6, 7, 8, 9,
+                                146, 118, // <--- changed the fletcher checksum
+                                END_OF_FRAME};
+                                
+    uint8_t dataTest[] = {0, START_OF_FRAME, 2, END_OF_FRAME, 4, ESC, 6, 7, 8, 9};
+    uint8_t dataBuffer[READ_DATA_LENGTH] = {0};
+    
+    uint16_t i;
+    for(i = 0; i < 17; i++){
+        readData[i] = dataToReadData[i];
+    }
+    readableIndex = 17;
+    
+    /* now that the uart channel is set up properly for a read,
+     * we can actually start the test */
+    uint16_t length = FRM_pull(dataBuffer);
+    
+    TEST_ASSERT_EQUAL_INT(0, length);
+}
