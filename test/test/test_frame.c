@@ -1,6 +1,6 @@
 #include "unity.h"
 #include "frame.c"
-#include "uart_channel.c"
+#include "mock_uart_channel.c"
 
 #define BUFFER_ARRAY_LENGTH 8
 
