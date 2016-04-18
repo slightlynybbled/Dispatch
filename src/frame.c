@@ -143,8 +143,9 @@ uint16_t FRM_pull(uint8_t* data){
         uint16_t checksum = data[length - 2] | (data[length - 1] << 8);
         length -= 2;
         uint16_t check = FRM_fletcher16(data, length);
-        if(check != checksum)
+        if(check != checksum){
             length = 0;
+        }
     }
     
     return length;
