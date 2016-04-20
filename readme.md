@@ -1,5 +1,3 @@
-
-
 # Purpose #
 
 Dispatch is intended as an easy-to-use serial library that allows a simple exchange
@@ -71,3 +69,13 @@ When an item is published to the endpoint "foo", then `mySubscriberFunction` is 
     DIS_getElements(1, myData1Received);
     
 A more complete example may be found within the 'examples' directory.
+
+# Contributions #
+
+To make a contribution, simply fork the repository.  Create a branch that is appropriately
+descriptive of your change and perform your development.  When complete, create a pull
+request using that branch - DO NOT merge into master!  Once the proper test coverage is added
+and passing on TravisCI, then we can merge into the master branch.
+
+In some cases in which the documentation or examples are contributed, this process will be
+fast-tracked.
