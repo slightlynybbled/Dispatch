@@ -28,6 +28,24 @@ void subscriber0(void){
     subscriberCount++;
 }
 
+uint8_t u8arr[3] = {0};
+uint16_t u16arr[3] = {0};
+uint32_t u32arr[3] = {0};
+void subscriber1(void){
+    DIS_getElements(0, u8arr);
+    DIS_getElements(1, u16arr);
+    DIS_getElements(2, u32arr);
+}
+
+int8_t s8arr[3] = {0};
+int16_t s16arr[3] = {0};
+int32_t s32arr[3] = {0};
+void subscriber2(void){
+    DIS_getElements(0, s8arr);
+    DIS_getElements(1, s16arr);
+    DIS_getElements(2, s32arr);
+}
+
 /**********************************************/
 /* tests below this line */
 
@@ -88,7 +106,6 @@ void test_publish_1_u8(void){
     
     uint16_t i;
     for(i = 0; i < 13; i++){
-        printf("%d ", i);
         TEST_ASSERT_EQUAL_INT(dataTest[i], writeData[i]);
     }
 }
@@ -113,7 +130,6 @@ void test_publish_3x3_u8u16u32(void){
     
     uint16_t i;
     for(i = 0; i < 34; i++){
-        printf("%d ", i);
         TEST_ASSERT_EQUAL_INT(dataTest[i], writeData[i]);
     }
 }
@@ -138,12 +154,11 @@ void test_publish_3x3_s8s16s32(void){
     
     uint16_t i;
     for(i = 0; i < 35; i++){
-        printf("%d ", i);
         TEST_ASSERT_EQUAL_INT(dataTest[i], writeData[i]);
     }
 }
 
-void test_subscribe(void){
+void test_subscribe_and_process(void){
     subscriberCount = 0;
     DIS_subscribe("foo", &subscriber0);  // subscribe to 'foo'
     
@@ -177,3 +192,68 @@ void test_subscribe(void){
     
     TEST_ASSERT_EQUAL_INT(1, subscriberCount);
 }
+
+void test_subscribe_unsigned(void){
+    DIS_subscribe("foo", &subscriber1);  // subscribe to 'foo'
+    
+    uint8_t dataTest[WRITE_DATA_LENGTH] = 
+                        {   START_OF_FRAME,
+                            'f', 'o', 'o', 0,
+                            3, 3, 0, 0x42, 0x06, 
+                            10, 20, 30,
+                            40, 0, 50, 0, 60, 0,
+                            70, 0, 0, 0, 80, 0, 0, 0, 90, 0, 0, 0,
+                            87, 250,
+                            END_OF_FRAME
+                        };
+    uint16_t i;
+    for(i = 0; i < 34; i++){
+        readData[i] = dataTest[i];
+    }
+    readableIndex = 34;
+    
+    DIS_process();  // should call the subscriber
+
+    uint8_t data0[] = {10, 20, 30};
+    uint16_t data1[] = {40, 50, 60};
+    uint32_t data2[] = {70, 80, 90};
+    
+    for(i = 0; i < 3; i++){
+        TEST_ASSERT_EQUAL_INT(data0[i], u8arr[i]);
+        TEST_ASSERT_EQUAL_INT(data1[i], u16arr[i]);
+        TEST_ASSERT_EQUAL_INT(data2[i], u32arr[i]);
+    }
+}
+
+void test_subscribe_signed(void){
+    DIS_subscribe("foo", &subscriber2);  // subscribe to 'foo'
+    
+    uint8_t dataTest[WRITE_DATA_LENGTH] = 
+                        {   START_OF_FRAME,
+                            'f', 'o', 'o', 0,
+                            3, 3, 0, 0x53, 0x07, 
+                            246, ESC ^ 0x20, 236, 226, // <= one of these happens to be an esc char
+                            216, 255, 206, 255, 196, 255,
+                            186, 255, 255, 255, 176, 255, 255, 255, 166, 255, 255, 255,
+                            234, 234,
+                            END_OF_FRAME
+                        };
+    uint16_t i;
+    for(i = 0; i < 35; i++){
+        readData[i] = dataTest[i];
+    }
+    readableIndex = 35;
+    
+    DIS_process();  // should call the subscriber
+
+    int8_t data0[] = {-10, -20, -30};
+    int16_t data1[] = {-40, -50, -60};
+    int32_t data2[] = {-70, -80, -90};
+    
+    for(i = 0; i < 3; i++){
+        TEST_ASSERT_EQUAL_INT(data0[i], s8arr[i]);
+        TEST_ASSERT_EQUAL_INT(data1[i], s16arr[i]);
+        TEST_ASSERT_EQUAL_INT(data2[i], s32arr[i]);
+    }
+}
+
