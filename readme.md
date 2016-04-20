@@ -21,6 +21,29 @@ fletcher16 checksum.
 
 # Example Usage #
 
+## Setting Up ##
+
+In order to set up the variables and functions internal to Dispatch, the following four
+functions MUST be called one time:
+
+    DIS_init();
+    
+    DIS_assignChannelReadable(&readable);
+    DIS_assignChannelWriteable(&writeable);
+    DIS_assignChannelRead(&read8);
+    DIS_assignChannelWrite(&write8);
+    
+## Running ##
+
+In order to properly execute received message, the `DIS_process()` must be called continually.
+`DIS_process()` may be called at reduced intervals, but the frequency of calling this function
+will correspondingly reduce response times to subscribing functions.  In most microcontroller
+platforms, `DIS_process()` will be placed inside the infinite `while(1)` loop.  If an RTOS is
+involved, it should be assigned as a task.
+
+If the platform is only sending Dispatch messages and not receiving them, then `DIS_process()`
+may be omitted.
+
 ## Publishing to an Endpoint ##
 
     uint8_t myData0[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
