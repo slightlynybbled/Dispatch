@@ -21,6 +21,16 @@ void tearDown(void)
     
 }
 
+/**********************************************/
+/* Use these functions to test the subscriber */
+uint8_t subscriberCount = 0;
+void subscriber0(void){
+    subscriberCount++;
+}
+
+/**********************************************/
+/* tests below this line */
+
 void test_init_readable(void)
 {
     TEST_ASSERT_NOT_NULL(channelReadableFunctPtr);
@@ -131,4 +141,39 @@ void test_publish_3x3_s8s16s32(void){
         printf("%d ", i);
         TEST_ASSERT_EQUAL_INT(dataTest[i], writeData[i]);
     }
+}
+
+void test_subscribe(void){
+    subscriberCount = 0;
+    DIS_subscribe("foo", &subscriber0);  // subscribe to 'foo'
+    
+    /* ensure that subscriber is not 
+        called through several calls to process */
+    DIS_process();  
+    DIS_process();  
+    DIS_process();
+    TEST_ASSERT_EQUAL_INT(0, subscriberCount);
+    
+    /* load the receiving function */
+    uint8_t dataTest[WRITE_DATA_LENGTH] = 
+                        {   START_OF_FRAME,
+                            'f', 'o', 'o', 0,
+                            1, 1, 0, 2, 
+                            10,
+                            83, 56,
+                            END_OF_FRAME
+                        };
+    int i;
+    for(i = 0; i < 13; i++){
+        readData[i] = dataTest[i];
+    }
+    readableIndex = 13;
+    
+    /* ensure that process is called many times, but 
+        that the 'subscriber' is called one time */
+    DIS_process();  
+    DIS_process();  
+    DIS_process();
+    
+    TEST_ASSERT_EQUAL_INT(1, subscriberCount);
 }
