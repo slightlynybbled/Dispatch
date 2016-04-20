@@ -13,10 +13,9 @@ More details may be found at [for(embed)](http://www.forembed.com).
 
 # Project Maturity #
 
-The project is new and has not been fully tested nor optimized.  I have integrated TravisCI into
-the workflow so that any commits contributed already has the test environment set up.  Currently,
-testing exists for about 10% of the functionality of the project.  I will continue to add test
-cases in the coming weeks.
+The project now has 80% unit test coverage and solid integration testing.  In some cases,
+unit testing was skipped for a function that integrated the function, such as with the
+fletcher16 checksum.
 
 ![travisci](https://travis-ci.org/slightlynybbled/Dispatch.svg?branch=master)
 
@@ -24,8 +23,9 @@ cases in the coming weeks.
 
 ## Publishing to an Endpoint ##
 
-    uint8_t myData[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
-    DIS_publish("foo:10,u8", myData);
+    uint8_t myData0[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+    uint16_t myData1[] = {10, 11, 12, 13, 14, 15, 16, 17, 18, 19};
+    DIS_publish("foo:10,u8,u16", myData);
     
 All subscribers to the endpoint "foo" will be called when the above statement is executed.
     
@@ -34,5 +34,17 @@ All subscribers to the endpoint "foo" will be called when the above statement is
     DIS_subscribe("foo", &mySubscriberFunction);
     
 When an item is published to the endpoint "foo", then `mySubscriberFunction` is executed.
+
+## Getting the Data within the Subscriber ##
+
+    uint8_t myData0Received[10];
+    uint16_t myData1Received[10];
+    
+    /* retrieve element 0, or the first element, into 'myData0Received'
+        and save the array length into 'length' */
+    uint8_t length = DIS_getElements(0, myDataReceived);
+    
+    /* retrieve element 1 into 'myData1Received' */
+    DIS_getElements(1, myData1Received);
     
 A more complete example may be found within the 'examples' directory.
