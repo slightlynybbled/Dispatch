@@ -104,7 +104,7 @@ void DIS_assignChannelWriteable(uint16_t (*functPtr)());
  * 
  * @param *functPtr a function pointer for a function that will
  * read <length> data into the array <data> */
-void DIS_assignChannelRead(void (*functPtr)(void* data, uint16_t length));
+void DIS_assignChannelRead(void (*functPtr)(uint8_t* data, uint16_t length));
 
 /** 
  * Use this function to assign the 'write' function.  The 'write'
@@ -114,6 +114,6 @@ void DIS_assignChannelRead(void (*functPtr)(void* data, uint16_t length));
  * 
  * @param *functPtr a function pointer for a function that will
  * write <length> data from <data> to the outgoing buffer */
-void DIS_assignChannelWrite(void (*functPtr)(void* data, uint16_t length));
+void DIS_assignChannelWrite(void (*functPtr)(uint8_t* data, uint16_t length));
 
 #endif

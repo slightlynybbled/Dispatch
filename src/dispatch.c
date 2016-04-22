@@ -748,10 +748,10 @@ void DIS_assignChannelWriteable(uint16_t (*functPtr)()){
     FRM_assignChannelWriteable(functPtr);
 }
 
-void DIS_assignChannelRead(void (*functPtr)(void* data, uint16_t length)){
+void DIS_assignChannelRead(void (*functPtr)(uint8_t* data, uint16_t length)){
     FRM_assignChannelRead(functPtr);
 }
 
-void DIS_assignChannelWrite(void (*functPtr)(void* data, uint16_t length)){
+void DIS_assignChannelWrite(void (*functPtr)(uint8_t* data, uint16_t length)){
     FRM_assignChannelWrite(functPtr);
 }

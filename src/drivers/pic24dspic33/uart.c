@@ -32,24 +32,22 @@ void UART_init(void){
     return;
 }
 
-void UART_read(void* data, uint16_t length){
+void UART_read(uint8_t* data, uint16_t length){
     uint32_t i = 0;
-    uint8_t* d = (uint8_t*)data;
     
     while(i < length){
-        d[i] = BUF_read8((Buffer*)&rxBuf);
+        data[i] = BUF_read8((Buffer*)&rxBuf);
         i++;
     }
 }
 
-void UART_write(void* data, uint16_t length){
+void UART_write(uint8_t* data, uint16_t length){
     uint32_t i = 0;
-    uint8_t* d = (uint8_t*)data;
     
     while(i < length){
         while(UART_writeable() == 0);   // wait for any current writes to clear
         
-        BUF_write8((Buffer*)&txBuf, d[i]);
+        BUF_write8((Buffer*)&txBuf, data[i]);
         i++;
     }
     
