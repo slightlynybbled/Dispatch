@@ -47,7 +47,7 @@ void FRM_assignChannelWriteable(uint16_t (*functPtr)());
  * @param functPtr a function pointer to a function which will read <length>
  * bytes to the channel output from <data>
  */
-void FRM_assignChannelRead(void (*functPtr)(void* data, uint16_t length));
+void FRM_assignChannelRead(void (*functPtr)(uint8_t* data, uint16_t length));
 
 /**
  * Assigns the 'write' function from the hardware access library.
@@ -55,6 +55,6 @@ void FRM_assignChannelRead(void (*functPtr)(void* data, uint16_t length));
  * @param functPtr a function pointer to a function which will read <length>
  * bytes from the channel input and into <data>
  */
-void FRM_assignChannelWrite(void (*functPtr)(void* data, uint16_t length));
+void FRM_assignChannelWrite(void (*functPtr)(uint8_t* data, uint16_t length));
 
 #endif

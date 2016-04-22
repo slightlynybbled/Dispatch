@@ -17,7 +17,7 @@ void UART_init(void);
  * @param data destination array pointer
  * @param length number of bytes to read
  */
-void UART_read(void* data, uint16_t length);
+void UART_read(uint8_t* data, uint16_t length);
 
 /**
  * Writes data to the UART send circular buffer
@@ -25,7 +25,7 @@ void UART_read(void* data, uint16_t length);
  * @param data source array pointer of the data to write
  * @param length length of the data to write
  */
-void UART_write(void* data, uint16_t length);
+void UART_write(uint8_t* data, uint16_t length);
 
 /**
  * Returns the number of bytes waiting to be read
