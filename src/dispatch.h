@@ -2,21 +2,7 @@
 #define _DISPATCH_H
 
 #include <stdint.h>
-
-/** The max number of dimensions that will be utilized */
-#define MAX_NUM_OF_FORMAT_SPECIFIERS    4
-
-/** The maximum number of subscriptions that will be utilized */
-#define MAX_NUM_OF_SUBSCRIPTIONS        4
-
-/** The maximum topic string length */
-#define MAX_TOPIC_STR_LEN               16
-
-/** The maximum transmission message length */
-#define MAX_TRANSMIT_MESSAGE_LEN        128
-
-/** The maximum receive message length */
-#define MAX_RECEIVE_MESSAGE_LEN         32
+#include "dispatch_config.h"
 
 /**
  * Initializes the PUB library elements, must be called before
