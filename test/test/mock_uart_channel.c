@@ -31,25 +31,23 @@ uint16_t writeable(void){
     return WRITE_DATA_LENGTH - writeableIndex;
 }
 
-void read8(void* data, uint16_t length){
+void read8(uint8_t* data, uint16_t length){
     readableIndex -= length;
     if(readableIndex & 0x8000){
         readableIndex = 0;
     }
     
     int i;
-    uint8_t* dataPtr = (uint8_t*)data;
     for(i = 0; i < length; i++){
-        dataPtr[i] = readData[i];
+        data[i] = readData[i];
     }
 }
 
-void write8(void* data, uint16_t length){
+void write8(uint8_t* data, uint16_t length){
     int i;
-    uint8_t* dataPtr = (uint8_t*)data;
     
     for(i = 0; i < length; i++){
-        writeData[i+writeableIndex] = dataPtr[i];
+        writeData[i+writeableIndex] = data[i];
     }
     
     writeableIndex += length;
