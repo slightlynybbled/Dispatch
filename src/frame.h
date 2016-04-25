@@ -3,8 +3,7 @@
 
 #include <stdint.h>
 #include <stdbool.h>
-
-#define RX_FRAME_LENGTH 64
+#include "dispatch_config.h"
 
 /**
  * Use to push an array element to be framed and sent.
