@@ -7,13 +7,13 @@ order to get data from the sender to the receiver.
 The form of Dispatch was largely inspired by [Telemetry](https://github.com/Overdrivr/Telemetry),
 which is described by the author as a publish-subscribe model.
 
-More details may be found at [for(embed)](http://www.forembed.com).
+More details may be found at [for(embed)](http://www.forembed.com/introducing-dispatch.html).
 
 # Project Maturity #
 
-The project now has 80% unit test coverage and solid integration testing.  In some cases,
-unit testing was skipped for a function that integrated the function, such as with the
-fletcher16 checksum.
+The project now has solid unit test integration tests.  In some cases,
+unit testing was skipped for a function that integrated the function,
+such as with the fletcher16 checksum.
 
 ![travisci](https://travis-ci.org/slightlynybbled/Dispatch.svg?branch=master)
 
@@ -68,7 +68,8 @@ When an item is published to the endpoint "foo", then `mySubscriberFunction` is 
     /* retrieve element 1 into 'myData1Received' */
     DIS_getElements(1, myData1Received);
     
-A more complete example may be found within the 'examples' directory.
+A more complete example may be found within the
+[examples](https://github.com/slightlynybbled/Dispatch/tree/master/examples) directory.
 
 # Contributions #
 
