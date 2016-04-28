@@ -9,6 +9,9 @@
 static uint8_t rxFrame[RX_FRAME_LENGTH];
 static uint16_t rxFrameIndex = 0;
 
+uint16_t f16Sum1 = 0x00ff;
+uint16_t f16Sum2 = 0x00ff;
+
 void FRM_pushByte(uint8_t data);
 uint16_t FRM_fletcher16(uint8_t* data, size_t bytes);
 
@@ -17,30 +20,32 @@ uint16_t (*channelWriteableFunctPtr)();
 void (*channelReadFunctPtr)(uint8_t* data, uint16_t length);
 void (*channelWriteFunctPtr)(uint8_t* data, uint16_t length);
 
-void FRM_push(uint8_t* data, uint16_t length){
-    int16_t i = 0;
-    uint8_t dataToSend;
-    
-    uint16_t check = FRM_fletcher16(data, length);
-    uint8_t check0 = (uint8_t)(check & 0x00ff);
-    uint8_t check1 = (uint8_t)((check & 0xff00) >> 8);
-    
+void FRM_init(void){
     /* wait for send buffer to clear, then write the START_OF_FRAME */
     while((*channelWriteableFunctPtr)() == 0);
-    dataToSend = START_OF_FRAME;
+    uint8_t dataToSend = START_OF_FRAME;
     channelWriteFunctPtr(&dataToSend, 1);
     
-    /* copy the data from data to the txFrame */
-    while(i < length){
-        FRM_pushByte(data[i++]);
-    }
+    f16Sum1 = f16Sum2 = 0x00ff;
+}
+
+void FRM_data(uint8_t data){
+    f16Sum1 += (uint16_t)data;
+    f16Sum2 += f16Sum1;
     
-    FRM_pushByte(check0);
-    FRM_pushByte(check1);
+    FRM_pushByte(data);
+}
+
+void FRM_finish(void){
+	f16Sum1 = (f16Sum1 & 0x00ff) + (f16Sum1 >> 8);
+	f16Sum2 = (f16Sum2 & 0x00ff) + (f16Sum2 >> 8);
     
-    /* wait for send buffer to clear, then write the START_OF_FRAME */
+    FRM_pushByte(f16Sum1);
+    FRM_pushByte(f16Sum2);
+    
+    /* wait for send buffer to clear, then write the END_OF_FRAME */
     while(channelWriteableFunctPtr() == 0);
-    dataToSend = END_OF_FRAME;
+    uint8_t dataToSend = END_OF_FRAME;
     channelWriteFunctPtr(&dataToSend, 1);
 }
 
