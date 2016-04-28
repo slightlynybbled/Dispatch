@@ -20,7 +20,7 @@ void UART_init(void){
      */
     U1BRG = 12;
     U1MODE = 0x0000;    // TX/RX only, standard mode
-    U1STA = 0x0000;     // enable TX
+    U1STA = 0x0000;     // enable 
     
     /* uart interrupts */
     IFS0bits.U1TXIF = IFS0bits.U1RXIF = 0;
@@ -54,7 +54,7 @@ void UART_write(uint8_t* data, uint16_t length){
     /* if the transmit isn't active, then kick-start the
      * transmit; the interrupt routine will finish sending
      * the remainder of the buffer */
-    if(U1STAbits.TRMT == 1){
+    while((U1STAbits.UTXBF == 0) && (BUF_status((Buffer*)&txBuf) != BUFFER_EMPTY)){
         U1TXREG = BUF_read8((Buffer*)&txBuf);
     }
 }
@@ -70,12 +70,10 @@ uint16_t UART_writeable(void){
 void _ISR _U1TXInterrupt(void){
     /* read the byte(s) to be transmitted from the tx circular
      * buffer and transmit using the hardware register */
-    if(BUF_status((Buffer*)&txBuf) != BUFFER_EMPTY){
-        while((BUF_status((Buffer*)&txBuf) != BUFFER_EMPTY)
-                && (U1STAbits.UTXBF == 0)){
+    while((BUF_status((Buffer*)&txBuf) != BUFFER_EMPTY)
+            && (U1STAbits.UTXBF == 0)){
 
-            U1TXREG = BUF_read8((Buffer*)&txBuf);
-        }
+        U1TXREG = BUF_read8((Buffer*)&txBuf);
     }
     
     IFS0bits.U1TXIF = 0;
