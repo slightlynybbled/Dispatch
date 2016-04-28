@@ -84,13 +84,18 @@ void DIS_publish(const char* topic, ...){
         i++;
     }
     
+    FRM_init();
+    
     /* go through the first argument and extract the topic */
     uint16_t strIndex = 0;
     char topicStr[16] = {0};
     while((strIndex < len) && (topic[strIndex] != ',') && (topic[strIndex] != ':')){
-        topicStr[strIndex] = topic[strIndex];        
+        topicStr[strIndex] = topic[strIndex];
+        FRM_data(topic[strIndex]);  // send the topic string
         strIndex++;
     }
+    
+    FRM_data(0);    // send the \0 string terminator
     
     /* determine if there is more of the string left to process and, if
      * there is, then process the index */
@@ -241,16 +246,6 @@ void DIS_publish(const char* topic, ...){
         
         i++;
     }while(i < commaCount);
-    
-    FRM_init();
-    
-    /* copy the topic */
-    i = 0;
-    while(topicStr[i] != 0){
-        FRM_data(topicStr[i]);
-        i++;
-    }
-    FRM_data(topicStr[i]);  // place a '\0' to delimit the topic string
     
     /* append the dimensions and length */
     FRM_data(txMsg.dimensions);
