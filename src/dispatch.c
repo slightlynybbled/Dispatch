@@ -242,54 +242,48 @@ void DIS_publish(const char* topic, ...){
         i++;
     }while(i < commaCount);
     
-    /* format the message structure into its final form before
-     * sending to the framing engine */
-    uint8_t msgData[MAX_TRANSMIT_MESSAGE_LEN] = {0};
-    uint16_t msgDataIndex = 0;
+    FRM_init();
     
     /* copy the topic */
     i = 0;
     while(topicStr[i] != 0){
-        msgData[msgDataIndex] = topicStr[i];
-        msgDataIndex++;
+        FRM_data(topicStr[i]);
         i++;
     }
-    msgDataIndex++; // place a '\0' to delimit the topic string
+    FRM_data(topicStr[i]);  // place a '\0' to delimit the topic string
     
     /* append the dimensions and length */
-    msgData[msgDataIndex++] = txMsg.dimensions;
-    msgData[msgDataIndex++] = (uint8_t)(txMsg.length & 0x00ff);
-    msgData[msgDataIndex++] = (uint8_t)((txMsg.length & 0xff00) >> 8);
+    FRM_data(txMsg.dimensions);
+    FRM_data((uint8_t)(txMsg.length & 0x00ff));
+    FRM_data((uint8_t)((txMsg.length & 0xff00) >> 8));
     
     /* append all format specifiers */
+    uint8_t fsArray[(MAX_NUM_OF_FORMAT_SPECIFIERS >> 1) + 1] = {0};
+    uint8_t fsArrayIndex = 0;
     i = 0;
     while(i < txMsg.dimensions){
         if((i & 1) == 0){
-            msgData[msgDataIndex] = txMsg.formatSpecifiers[i] & 0x0f;
+            fsArray[fsArrayIndex] = txMsg.formatSpecifiers[i] & 0x0f;
         }else{
-            msgData[msgDataIndex++] |= ((txMsg.formatSpecifiers[i] & 0x0f) << 4);
+            fsArray[fsArrayIndex] |= ((txMsg.formatSpecifiers[i] & 0x0f) << 4);
+            fsArrayIndex++;
         }
         
         i++;
     }
     
-    /* if the previous step results in an odd number being written, then
-     * ensure that the msgDataIndex is incremented so that the data doesn't
-     * get overwritten */
-    if(i & 1){
-        msgDataIndex++;
+    uint16_t fsArrayLength = (i >> 1) + 1;
+    for(i = 0; i < fsArrayLength; i++){
+        FRM_data(fsArray[i]);
     }
     
     /* append the data */
     i = 0;
     while(i < txMsg.length8bit){
-        msgData[msgDataIndex++] = txMsg.data[i++];
+        FRM_data(txMsg.data[i]);
+        i++;
     }
-    
-    FRM_init();
-    for(i=0; i < msgDataIndex; i++){
-        FRM_data(msgData[i]);
-    }
+
     FRM_finish();
 }
 
