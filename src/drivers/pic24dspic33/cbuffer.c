@@ -4,6 +4,7 @@ BufferStatus BUF_init(Buffer* b, void* arr, uint16_t length, uint8_t width){
     /* ensure that the length is a power of 2 */
     uint8_t lengthOk = 0;
     uint16_t possibleLength = 1;
+    uint16_t i;
     while(possibleLength < 16384){
         if(possibleLength == length){
             lengthOk = 1;
@@ -20,7 +21,6 @@ BufferStatus BUF_init(Buffer* b, void* arr, uint16_t length, uint8_t width){
         b->dataPtr = dataBuf;
         
         /* erase the buffer */
-        uint16_t i;
         for(i = 0; i < length; i++){
             dataBuf[i] = 0;
         }
@@ -45,17 +45,7 @@ BufferStatus BUF_init(Buffer* b, void* arr, uint16_t length, uint8_t width){
 }
 
 BufferStatus BUF_status(Buffer* b){
-    BufferStatus status;
-    
-    if(b->newest_index == b->oldest_index){
-        status = BUFFER_EMPTY;
-    }else if(((b->newest_index + 1) & ~b->length) == b->oldest_index){
-        status = BUFFER_FULL;
-    }else{
-        status = BUFFER_OK;
-    }
-    
-    return status;
+    return b->status;
 }
 
 int32_t BUF_emptySlots(Buffer* b){
@@ -199,4 +189,8 @@ uint32_t BUF_read32(Buffer* b){
         
     return readValue;
 }
+
+
+
+
 
