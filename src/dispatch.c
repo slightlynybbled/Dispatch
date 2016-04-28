@@ -286,8 +286,11 @@ void DIS_publish(const char* topic, ...){
         msgData[msgDataIndex++] = txMsg.data[i++];
     }
     
-    /* send the data */
-    FRM_push(msgData, msgDataIndex);
+    FRM_init();
+    for(i=0; i < msgDataIndex; i++){
+        FRM_data(msgData[i]);
+    }
+    FRM_finish();
 }
 
 void publish_str(const char* textMsg){

@@ -6,12 +6,24 @@
 #include "dispatch_config.h"
 
 /**
- * Use to push an array element to be framed and sent.
- *
- * @param data a byte-aligned array pointer
- * @param length the length of the array
+ * Use to initialize a frame (usually at the start of a message)
  */
-void FRM_push(uint8_t* data, uint16_t length);
+void FRM_init(void);
+
+/**
+ * Use to send data as part of a frame.  The frame must have been
+ * previously initialized using FRM_init().  All data that is sent
+ * is considered part of the same message until FRM_finish() is
+ * executed.
+ * 
+ * @param data a single byte of data
+ */
+void FRM_data(uint8_t data);
+
+/**
+ * Use to finish a frame
+ */
+void FRM_finish(void);
 
 /**
  * Use to read unframed data from the receive buffer
