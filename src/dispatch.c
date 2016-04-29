@@ -117,6 +117,8 @@ void DIS_publish(const char* topic, ...){
             FRM_data(data[i]);
         }
     }else{
+        /* if the code gets here, then there is definitely not a string
+         * being transmitted but one or more numeric values */
         FRM_data(dimensions);
 
         /* determine if there is more of the string left to process and, if
@@ -140,12 +142,18 @@ void DIS_publish(const char* topic, ...){
                 /* convert the ASCII number to an 
                  * integer and save it in arrIndex0 */
                 txMsg.length = (uint16_t)atol(strNum0);
+                length = (uint16_t)atol(strNum0);
             }
         }
 
         /* place a minimum on the arrIndex */
         if(txMsg.length < 1)
             txMsg.length = 1;
+        if(length < 1)
+            length = 1;
+        
+        FRM_data((uint8_t)(length & 0x00ff));
+        FRM_data((uint8_t)((length & 0xff00) >> 8));
 
         /* check the format specifiers */
         i = 0;
@@ -268,8 +276,8 @@ void DIS_publish(const char* topic, ...){
 
         /* append the dimensions and length */
         //FRM_data(txMsg.dimensions);
-        FRM_data((uint8_t)(txMsg.length & 0x00ff));
-        FRM_data((uint8_t)((txMsg.length & 0xff00) >> 8));
+        //FRM_data((uint8_t)(txMsg.length & 0x00ff));
+        //FRM_data((uint8_t)((txMsg.length & 0xff00) >> 8));
 
         /* append all format specifiers */
         uint8_t fsArray[(MAX_NUM_OF_FORMAT_SPECIFIERS >> 1) + 1] = {0};
