@@ -17,6 +17,25 @@ such as with the fletcher16 checksum.
 
 ![travisci](https://travis-ci.org/slightlynybbled/Dispatch.svg?branch=master)
 
+# RAM Requirements #
+
+## Transmission ##
+
+Transmission can occur using a minimum of global RAM.  I recommend at least 4 byes dedicated
+to the driver circular buffer, but that is your option.  If you keep this buffer very small, then
+the processor will stall while waiting for data to leave the buffer.  If you make it large
+enough to buffer your entire message, the processor will be free to perform other tasks while
+the driver sends the data via interrupts.
+
+## Reception ##
+
+At this time, the entire received message must be buffered in framing before it is realeased to
+the higher-level dispatch.  This is because the checksum must be verified.  Once the checksum
+is verified, the message is ready to be read by the DIS_process() function.  As a result, you
+should set the MAX_RECEIVE_MESSAGE_LENGTH (dispatch_config.h) to the longest number of bytes
+that you plan to send, plus 8.  For completely safe receptions, you should set the RX_FRAME_LENGTH
+to twice that number.
+
 # Example Usage #
 
 ## Setting Up ##
