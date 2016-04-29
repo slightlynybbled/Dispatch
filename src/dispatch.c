@@ -203,6 +203,26 @@ void DIS_publish(const char* topic, ...){
 
             i++;
         }
+        
+        /* append all format specifiers */
+        uint8_t fsArray[(MAX_NUM_OF_FORMAT_SPECIFIERS >> 1) + 1] = {0};
+        uint8_t fsArrayIndex = 0;
+        i = 0;
+        while(i < dimensions){
+            if((i & 1) == 0){
+                fsArray[fsArrayIndex] = txMsg.formatSpecifiers[i] & 0x0f;
+            }else{
+                fsArray[fsArrayIndex] |= ((txMsg.formatSpecifiers[i] & 0x0f) << 4);
+                fsArrayIndex++;
+            }
+
+            i++;
+        }
+
+        uint16_t fsArrayLength = (i >> 1) + 1;
+        for(i = 0; i < fsArrayLength; i++){
+            FRM_data(fsArray[i]);
+        }
 
         /* at this point:
          *     1. topic stored in topic[]
@@ -211,18 +231,6 @@ void DIS_publish(const char* topic, ...){
         i = 0;
         do{
             switch(txMsg.formatSpecifiers[i]){
-                /* no format specifiers means U8 */
-                case eNONE:
-                case eSTRING:
-                {
-                    char* data = va_arg(arguments, char*);
-                    publish_str(data);
-
-                    i = commaCount;     // just in case the user supplied more than
-                                        // one format specifier (invalid)
-                    break;
-                }
-
                 case eU8:
                 {
                     uint8_t* data = va_arg(arguments, uint8_t*);
@@ -278,26 +286,6 @@ void DIS_publish(const char* topic, ...){
         //FRM_data(txMsg.dimensions);
         //FRM_data((uint8_t)(txMsg.length & 0x00ff));
         //FRM_data((uint8_t)((txMsg.length & 0xff00) >> 8));
-
-        /* append all format specifiers */
-        uint8_t fsArray[(MAX_NUM_OF_FORMAT_SPECIFIERS >> 1) + 1] = {0};
-        uint8_t fsArrayIndex = 0;
-        i = 0;
-        while(i < txMsg.dimensions){
-            if((i & 1) == 0){
-                fsArray[fsArrayIndex] = txMsg.formatSpecifiers[i] & 0x0f;
-            }else{
-                fsArray[fsArrayIndex] |= ((txMsg.formatSpecifiers[i] & 0x0f) << 4);
-                fsArrayIndex++;
-            }
-
-            i++;
-        }
-
-        uint16_t fsArrayLength = (i >> 1) + 1;
-        for(i = 0; i < fsArrayLength; i++){
-            FRM_data(fsArray[i]);
-        }
 
         /* append the data */
         i = 0;
