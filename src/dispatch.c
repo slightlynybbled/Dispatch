@@ -116,192 +116,189 @@ void DIS_publish(const char* topic, ...){
         for(i = 0; i < length; i++){
             FRM_data(data[i]);
         }
-        
-        FRM_finish();
-        return;
     }else{
         FRM_data(dimensions);
-    }
-    
-    /* determine if there is more of the string left to process and, if
-     * there is, then process the index */
-    txMsg.length = 0;
-    if(strIndex < len){
-        /* check for the ':' character to know if this 
-         * is array or single-point processing */
-        if(topic[strIndex] == ':'){
-            strIndex++;
 
-            /* find he first number to the colon command or
-             * the end of the string */
-            char strNum0[8] = {0};
-            i = 0;
-            while((topic[strIndex] != ',') && (topic[strIndex] != 0)){
-                strNum0[i] = topic[strIndex];
-                i++;
+        /* determine if there is more of the string left to process and, if
+         * there is, then process the index */
+        txMsg.length = 0;
+        if(strIndex < len){
+            /* check for the ':' character to know if this 
+             * is array or single-point processing */
+            if(topic[strIndex] == ':'){
                 strIndex++;
-            }
-            /* convert the ASCII number to an 
-             * integer and save it in arrIndex0 */
-            txMsg.length = (uint16_t)atol(strNum0);
-        }
-    }
-    
-    /* place a minimum on the arrIndex */
-    if(txMsg.length < 1)
-        txMsg.length = 1;
-    
-    /* check the format specifiers */
-    i = 0;
-    while((strIndex < len) && (i < MAX_NUM_OF_FORMAT_SPECIFIERS)){
-        if(topic[strIndex] == ','){
-            strIndex++;
-            if(topic[strIndex] == 'u'){
-                strIndex++;
-                if(topic[strIndex] == '8'){
-                    txMsg.formatSpecifiers[i] = eU8;
-                }else if(topic[strIndex] == '1'){
-                    /* if the first digit is '1', then the next digit must
-                     * be 6, so there is no need to check for it */
-                    txMsg.formatSpecifiers[i] = eU16;
-                    strIndex++;
-                }else if(topic[strIndex] == '3'){
-                    /* if the first digit is '3', then the next digit must
-                     * be 2, so there is no need to check for it */
-                    txMsg.formatSpecifiers[i] = eU32;
+
+                /* find he first number to the colon command or
+                 * the end of the string */
+                char strNum0[8] = {0};
+                i = 0;
+                while((topic[strIndex] != ',') && (topic[strIndex] != 0)){
+                    strNum0[i] = topic[strIndex];
+                    i++;
                     strIndex++;
                 }
-            }else if(topic[strIndex] == 's'){
+                /* convert the ASCII number to an 
+                 * integer and save it in arrIndex0 */
+                txMsg.length = (uint16_t)atol(strNum0);
+            }
+        }
+
+        /* place a minimum on the arrIndex */
+        if(txMsg.length < 1)
+            txMsg.length = 1;
+
+        /* check the format specifiers */
+        i = 0;
+        while((strIndex < len) && (i < MAX_NUM_OF_FORMAT_SPECIFIERS)){
+            if(topic[strIndex] == ','){
                 strIndex++;
-                if(topic[strIndex] == '8'){
-                    txMsg.formatSpecifiers[i] = eS8;
-                }else if(topic[strIndex] == '1'){
-                    /* if the first digit is '1', then the next digit must
-                     * be 6, so there is no need to check for it */
-                    txMsg.formatSpecifiers[i] = eS16;
+                if(topic[strIndex] == 'u'){
                     strIndex++;
-                }else if(topic[strIndex] == '3'){
-                    /* if the first digit is '3', then the next digit must
-                     * be 2, so there is no need to check for it */
-                    txMsg.formatSpecifiers[i] = eS32;
+                    if(topic[strIndex] == '8'){
+                        txMsg.formatSpecifiers[i] = eU8;
+                    }else if(topic[strIndex] == '1'){
+                        /* if the first digit is '1', then the next digit must
+                         * be 6, so there is no need to check for it */
+                        txMsg.formatSpecifiers[i] = eU16;
+                        strIndex++;
+                    }else if(topic[strIndex] == '3'){
+                        /* if the first digit is '3', then the next digit must
+                         * be 2, so there is no need to check for it */
+                        txMsg.formatSpecifiers[i] = eU32;
+                        strIndex++;
+                    }
+                }else if(topic[strIndex] == 's'){
                     strIndex++;
-                }else if(topic[strIndex] == 't'){
-                    /* this is the case which calls for a string to be sent */
-                    txMsg.formatSpecifiers[i] = eSTRING;
-                    strIndex++;
+                    if(topic[strIndex] == '8'){
+                        txMsg.formatSpecifiers[i] = eS8;
+                    }else if(topic[strIndex] == '1'){
+                        /* if the first digit is '1', then the next digit must
+                         * be 6, so there is no need to check for it */
+                        txMsg.formatSpecifiers[i] = eS16;
+                        strIndex++;
+                    }else if(topic[strIndex] == '3'){
+                        /* if the first digit is '3', then the next digit must
+                         * be 2, so there is no need to check for it */
+                        txMsg.formatSpecifiers[i] = eS32;
+                        strIndex++;
+                    }else if(topic[strIndex] == 't'){
+                        /* this is the case which calls for a string to be sent */
+                        txMsg.formatSpecifiers[i] = eSTRING;
+                        strIndex++;
+                    }
+                }
+                strIndex++;
+            }else{
+                /* if a comma isn't here, then abort the format specifier */
+                break;
+            }
+
+            i++;
+        }
+
+        /* at this point:
+         *     1. topic stored in topic[]
+         *     2. array length is in msg.length
+         *     3. format specifiers are in msg.formatSpecifiers[] array */
+        i = 0;
+        do{
+            switch(txMsg.formatSpecifiers[i]){
+                /* no format specifiers means U8 */
+                case eNONE:
+                case eSTRING:
+                {
+                    char* data = va_arg(arguments, char*);
+                    publish_str(data);
+
+                    i = commaCount;     // just in case the user supplied more than
+                                        // one format specifier (invalid)
+                    break;
+                }
+
+                case eU8:
+                {
+                    uint8_t* data = va_arg(arguments, uint8_t*);
+                    publish_u8(data, txMsg.length);
+                    break;
+                }
+
+                case eS8:
+                {
+                    int8_t* data = va_arg(arguments, int8_t*);
+                    publish_s8(data, txMsg.length);
+                    break;
+                }
+
+                case eU16:
+                {
+                    uint16_t* data = va_arg(arguments, uint16_t*);
+                    publish_u16(data, txMsg.length);
+                    break;
+                }
+
+                case eS16:
+                {
+                    int16_t* data = va_arg(arguments, int16_t*);
+                    publish_s16(data, txMsg.length);
+                    break;
+                }
+
+                case eU32:
+                {
+                    uint32_t* data = va_arg(arguments, uint32_t*);
+                    publish_u32(data, txMsg.length);
+                    break;
+                }
+
+                case eS32:
+                {
+                    int32_t* data = va_arg(arguments, int32_t*);
+                    publish_s32(data, txMsg.length);
+                    break;
+                }
+
+                default:
+                {
+
                 }
             }
-            strIndex++;
-        }else{
-            /* if a comma isn't here, then abort the format specifier */
-            break;
-        }
-        
-        i++;
-    }
-    
-    /* at this point:
-     *     1. topic stored in topic[]
-     *     2. array length is in msg.length
-     *     3. format specifiers are in msg.formatSpecifiers[] array */
-    i = 0;
-    do{
-        switch(txMsg.formatSpecifiers[i]){
-            /* no format specifiers means U8 */
-            case eNONE:
-            case eSTRING:
-            {
-                char* data = va_arg(arguments, char*);
-                publish_str(data);
-                
-                i = commaCount;     // just in case the user supplied more than
-                                    // one format specifier (invalid)
-                break;
-            }
-            
-            case eU8:
-            {
-                uint8_t* data = va_arg(arguments, uint8_t*);
-                publish_u8(data, txMsg.length);
-                break;
-            }
-            
-            case eS8:
-            {
-                int8_t* data = va_arg(arguments, int8_t*);
-                publish_s8(data, txMsg.length);
-                break;
-            }
-            
-            case eU16:
-            {
-                uint16_t* data = va_arg(arguments, uint16_t*);
-                publish_u16(data, txMsg.length);
-                break;
-            }
-            
-            case eS16:
-            {
-                int16_t* data = va_arg(arguments, int16_t*);
-                publish_s16(data, txMsg.length);
-                break;
-            }
-            
-            case eU32:
-            {
-                uint32_t* data = va_arg(arguments, uint32_t*);
-                publish_u32(data, txMsg.length);
-                break;
-            }
-            
-            case eS32:
-            {
-                int32_t* data = va_arg(arguments, int32_t*);
-                publish_s32(data, txMsg.length);
-                break;
-            }
-            
-            default:
-            {
-                
-            }
-        }
-        
-        i++;
-    }while(i < commaCount);
-    
-    /* append the dimensions and length */
-    //FRM_data(txMsg.dimensions);
-    FRM_data((uint8_t)(txMsg.length & 0x00ff));
-    FRM_data((uint8_t)((txMsg.length & 0xff00) >> 8));
-    
-    /* append all format specifiers */
-    uint8_t fsArray[(MAX_NUM_OF_FORMAT_SPECIFIERS >> 1) + 1] = {0};
-    uint8_t fsArrayIndex = 0;
-    i = 0;
-    while(i < txMsg.dimensions){
-        if((i & 1) == 0){
-            fsArray[fsArrayIndex] = txMsg.formatSpecifiers[i] & 0x0f;
-        }else{
-            fsArray[fsArrayIndex] |= ((txMsg.formatSpecifiers[i] & 0x0f) << 4);
-            fsArrayIndex++;
-        }
-        
-        i++;
-    }
-    
-    uint16_t fsArrayLength = (i >> 1) + 1;
-    for(i = 0; i < fsArrayLength; i++){
-        FRM_data(fsArray[i]);
-    }
-    
-    /* append the data */
-    i = 0;
-    while(i < txMsg.length8bit){
-        FRM_data(txMsg.data[i]);
-        i++;
-    }
 
+            i++;
+        }while(i < commaCount);
+
+        /* append the dimensions and length */
+        //FRM_data(txMsg.dimensions);
+        FRM_data((uint8_t)(txMsg.length & 0x00ff));
+        FRM_data((uint8_t)((txMsg.length & 0xff00) >> 8));
+
+        /* append all format specifiers */
+        uint8_t fsArray[(MAX_NUM_OF_FORMAT_SPECIFIERS >> 1) + 1] = {0};
+        uint8_t fsArrayIndex = 0;
+        i = 0;
+        while(i < txMsg.dimensions){
+            if((i & 1) == 0){
+                fsArray[fsArrayIndex] = txMsg.formatSpecifiers[i] & 0x0f;
+            }else{
+                fsArray[fsArrayIndex] |= ((txMsg.formatSpecifiers[i] & 0x0f) << 4);
+                fsArrayIndex++;
+            }
+
+            i++;
+        }
+
+        uint16_t fsArrayLength = (i >> 1) + 1;
+        for(i = 0; i < fsArrayLength; i++){
+            FRM_data(fsArray[i]);
+        }
+
+        /* append the data */
+        i = 0;
+        while(i < txMsg.length8bit){
+            FRM_data(txMsg.data[i]);
+            i++;
+        }
+    }
+    
     FRM_finish();
 }
 
