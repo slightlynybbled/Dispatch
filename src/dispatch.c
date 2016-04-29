@@ -201,7 +201,7 @@ void DIS_publish(const char* topic, ...){
             i++;
         }
 
-        uint16_t fsArrayLength = (i >> 1) + 1;
+        uint16_t fsArrayLength = ((i + 1) >> 1);
         for(i = 0; i < fsArrayLength; i++){
             FRM_data(fsArray[i]);
         }

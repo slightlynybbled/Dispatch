@@ -15,8 +15,9 @@ int main(void){
     DIS_subscribe("foo", &mySubscriberFunction);
     
     /* send a single dispatch consisting of 4 data points */
-    uint8_t data[] = {1, 2, 3, 4};
-    DIS_publish("bar:4,u8", data);
+    uint8_t data1[] = {1, 2, 3, 4};
+    uint8_t data2[] = {5, 6, 7, 8};
+    DIS_publish("bar:4,u8,u8", data1, data2);
     
     /* forever loop */
     while(1){

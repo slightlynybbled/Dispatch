@@ -110,6 +110,29 @@ void test_publish_1_u8(void){
     }
 }
 
+void test_publish_2x3_u8u16(void){
+    uint8_t dataTest[WRITE_DATA_LENGTH] = 
+                        {   START_OF_FRAME,
+                            'f', 'o', 'o', 0,
+                            2, 3, 0, 0x42,  
+                            10, 20, 30,
+                            40, 0, 50, 0, 60, 0,
+                            95, 31,
+                            END_OF_FRAME
+                        };
+
+    uint8_t data0[] = {10, 20, 30};
+    uint16_t data1[] = {40, 50, 60};
+    
+    DIS_publish("foo:3,u8,u16", data0, data1);
+    
+    uint16_t i;
+    for(i = 0; i < 22; i++){
+        printf("(%d, %d) ", i, writeData[i]);
+        TEST_ASSERT_EQUAL_INT(dataTest[i], writeData[i]);
+    }
+}
+
 void test_publish_3x3_u8u16u32(void){
     uint8_t dataTest[WRITE_DATA_LENGTH] = 
                         {   START_OF_FRAME,
