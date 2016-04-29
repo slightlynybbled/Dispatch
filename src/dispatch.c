@@ -234,42 +234,86 @@ void DIS_publish(const char* topic, ...){
                 case eU8:
                 {
                     uint8_t* data = va_arg(arguments, uint8_t*);
-                    publish_u8(data, txMsg.length);
+                    
+                    uint8_t j = 0;
+                    while(j < length){
+                        FRM_data(data[j]);
+                        j++;
+                    }
+                    
                     break;
                 }
 
                 case eS8:
                 {
                     int8_t* data = va_arg(arguments, int8_t*);
-                    publish_s8(data, txMsg.length);
+                    
+                    uint8_t j = 0;
+                    while(j < length){
+                        FRM_data((uint8_t)data[j]);
+                        j++;
+                    }
+                                        
                     break;
                 }
 
                 case eU16:
                 {
                     uint16_t* data = va_arg(arguments, uint16_t*);
-                    publish_u16(data, txMsg.length);
+                    
+                    uint8_t j = 0;
+                    while(j < length){
+                        FRM_data((uint8_t)(data[j] & 0x00ff));
+                        FRM_data((uint8_t)((data[j] & 0xff00) >> 8));
+                        j++;
+                    }
+                    
                     break;
                 }
 
                 case eS16:
                 {
                     int16_t* data = va_arg(arguments, int16_t*);
-                    publish_s16(data, txMsg.length);
+                    
+                    uint8_t j = 0;
+                    while(j < length){
+                        FRM_data((uint8_t)(data[j] & 0x00ff));
+                        FRM_data((uint8_t)((data[j] & 0xff00) >> 8));
+                        j++;
+                    }
+                    
                     break;
                 }
 
                 case eU32:
                 {
                     uint32_t* data = va_arg(arguments, uint32_t*);
-                    publish_u32(data, txMsg.length);
+                    
+                    uint8_t j = 0;
+                    while(j < length){
+                        FRM_data((uint8_t)(data[j] & 0x000000ff));
+                        FRM_data((uint8_t)((data[j] & 0x0000ff00) >> 8));
+                        FRM_data((uint8_t)((data[j] & 0x00ff0000) >> 16));
+                        FRM_data((uint8_t)((data[j] & 0xff000000) >> 24));
+                        j++;
+                    }
+                    
                     break;
                 }
 
                 case eS32:
                 {
                     int32_t* data = va_arg(arguments, int32_t*);
-                    publish_s32(data, txMsg.length);
+                    
+                    uint8_t j = 0;
+                    while(j < length){
+                        FRM_data((uint8_t)(data[j] & 0x000000ff));
+                        FRM_data((uint8_t)((data[j] & 0x0000ff00) >> 8));
+                        FRM_data((uint8_t)((data[j] & 0x00ff0000) >> 16));
+                        FRM_data((uint8_t)((data[j] & 0xff000000) >> 24));
+                        j++;
+                    }
+                    
                     break;
                 }
 
@@ -280,19 +324,7 @@ void DIS_publish(const char* topic, ...){
             }
 
             i++;
-        }while(i < commaCount);
-
-        /* append the dimensions and length */
-        //FRM_data(txMsg.dimensions);
-        //FRM_data((uint8_t)(txMsg.length & 0x00ff));
-        //FRM_data((uint8_t)((txMsg.length & 0xff00) >> 8));
-
-        /* append the data */
-        i = 0;
-        while(i < txMsg.length8bit){
-            FRM_data(txMsg.data[i]);
-            i++;
-        }
+        }while(i < dimensions);
     }
     
     FRM_finish();
