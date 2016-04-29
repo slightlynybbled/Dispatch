@@ -9,8 +9,8 @@
 static uint8_t rxFrame[RX_FRAME_LENGTH];
 static uint16_t rxFrameIndex = 0;
 
-uint16_t f16Sum1 = 0x00ff;
-uint16_t f16Sum2 = 0x00ff;
+static uint16_t f16Sum1 = 0x00ff;
+static uint16_t f16Sum2 = 0x00ff;
 
 void FRM_pushByte(uint8_t data);
 uint16_t FRM_fletcher16(uint8_t* data, size_t bytes);
