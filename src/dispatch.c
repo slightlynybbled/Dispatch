@@ -32,7 +32,6 @@ typedef struct {
 }Subscription;
 
 /********** global variable declarations **********/
-static Message txMsg;
 static Message rxMsg;
 static Subscription sub[MAX_NUM_OF_SUBSCRIPTIONS];
 
@@ -53,18 +52,14 @@ void DIS_init(void){
 void DIS_publish(const char* topic, ...){
     va_list arguments;
     va_start(arguments, topic);
-    
-    /* initialize the message */
-    txMsg.dimensions = 0;
-    txMsg.length = 0;
-    txMsg.length8bit = 0;
-    
+
     uint8_t dimensions = 0;
     uint8_t length = 0;
+    FormatSpecifier formatSpecifiers[MAX_NUM_OF_FORMAT_SPECIFIERS];
     
     uint16_t i;
     for(i = 0; i < MAX_NUM_OF_FORMAT_SPECIFIERS; i++){
-        txMsg.formatSpecifiers[i] = 0;
+        formatSpecifiers[i] = 0;
     }
     
     /* get the num of args by counting the commas */
@@ -114,7 +109,6 @@ void DIS_publish(const char* topic, ...){
 
         /* determine if there is more of the string left to process and, if
          * there is, then process the index */
-        txMsg.length = 0;
         if(strIndex < len){
             /* check for the ':' character to know if this 
              * is array or single-point processing */
@@ -132,14 +126,11 @@ void DIS_publish(const char* topic, ...){
                 }
                 /* convert the ASCII number to an 
                  * integer and save it in arrIndex0 */
-                txMsg.length = (uint16_t)atol(strNum0);
                 length = (uint16_t)atol(strNum0);
             }
         }
 
         /* place a minimum on the arrIndex */
-        if(txMsg.length < 1)
-            txMsg.length = 1;
         if(length < 1)
             length = 1;
         
@@ -154,35 +145,35 @@ void DIS_publish(const char* topic, ...){
                 if(topic[strIndex] == 'u'){
                     strIndex++;
                     if(topic[strIndex] == '8'){
-                        txMsg.formatSpecifiers[i] = eU8;
+                        formatSpecifiers[i] = eU8;
                     }else if(topic[strIndex] == '1'){
                         /* if the first digit is '1', then the next digit must
                          * be 6, so there is no need to check for it */
-                        txMsg.formatSpecifiers[i] = eU16;
+                        formatSpecifiers[i] = eU16;
                         strIndex++;
                     }else if(topic[strIndex] == '3'){
                         /* if the first digit is '3', then the next digit must
                          * be 2, so there is no need to check for it */
-                        txMsg.formatSpecifiers[i] = eU32;
+                        formatSpecifiers[i] = eU32;
                         strIndex++;
                     }
                 }else if(topic[strIndex] == 's'){
                     strIndex++;
                     if(topic[strIndex] == '8'){
-                        txMsg.formatSpecifiers[i] = eS8;
+                        formatSpecifiers[i] = eS8;
                     }else if(topic[strIndex] == '1'){
                         /* if the first digit is '1', then the next digit must
                          * be 6, so there is no need to check for it */
-                        txMsg.formatSpecifiers[i] = eS16;
+                        formatSpecifiers[i] = eS16;
                         strIndex++;
                     }else if(topic[strIndex] == '3'){
                         /* if the first digit is '3', then the next digit must
                          * be 2, so there is no need to check for it */
-                        txMsg.formatSpecifiers[i] = eS32;
+                        formatSpecifiers[i] = eS32;
                         strIndex++;
                     }else if(topic[strIndex] == 't'){
                         /* this is the case which calls for a string to be sent */
-                        txMsg.formatSpecifiers[i] = eSTRING;
+                        formatSpecifiers[i] = eSTRING;
                         strIndex++;
                     }
                 }
@@ -201,9 +192,9 @@ void DIS_publish(const char* topic, ...){
         i = 0;
         while(i < dimensions){
             if((i & 1) == 0){
-                fsArray[fsArrayIndex] = txMsg.formatSpecifiers[i] & 0x0f;
+                fsArray[fsArrayIndex] = formatSpecifiers[i] & 0x0f;
             }else{
-                fsArray[fsArrayIndex] |= ((txMsg.formatSpecifiers[i] & 0x0f) << 4);
+                fsArray[fsArrayIndex] |= ((formatSpecifiers[i] & 0x0f) << 4);
                 fsArrayIndex++;
             }
 
@@ -221,7 +212,7 @@ void DIS_publish(const char* topic, ...){
          *     3. format specifiers are in msg.formatSpecifiers[] array */
         i = 0;
         do{
-            switch(txMsg.formatSpecifiers[i]){
+            switch(formatSpecifiers[i]){
                 case eU8:
                 {
                     uint8_t* data = va_arg(arguments, uint8_t*);
