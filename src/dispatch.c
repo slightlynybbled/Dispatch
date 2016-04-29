@@ -68,6 +68,9 @@ void DIS_publish(const char* topic, ...){
     txMsg.length = 0;
     txMsg.length8bit = 0;
     
+    uint8_t dimensions = 0;
+    uint8_t length = 0;
+    
     uint16_t i;
     for(i = 0; i < MAX_NUM_OF_FORMAT_SPECIFIERS; i++){
         txMsg.formatSpecifiers[i] = 0;
@@ -93,10 +96,32 @@ void DIS_publish(const char* topic, ...){
     }
     FRM_data(0);    // send the \0 string terminator
     
-    uint8_t dimensions = commaCount;
-    if(dimensions == 0)
-        dimensions++;
-    FRM_data(dimensions);
+    dimensions = commaCount;
+    if(dimensions == 0){
+        /* if the dimension == 0, then this is a string,
+         *  simply transmit the string */
+        FRM_data(1);
+        
+        char* data = va_arg(arguments, char*);
+        
+        /* send the length */
+        length = strlen(data);
+        FRM_data((uint8_t)(length & 0x00ff));
+        FRM_data((uint8_t)((length & 0xff00) >> 8));
+        
+        /* send the format specifier for a string */
+        FRM_data(eSTRING);
+        
+        /* finally, send the string */
+        for(i = 0; i < length; i++){
+            FRM_data(data[i]);
+        }
+        
+        FRM_finish();
+        return;
+    }else{
+        FRM_data(dimensions);
+    }
     
     /* determine if there is more of the string left to process and, if
      * there is, then process the index */
@@ -234,6 +259,11 @@ void DIS_publish(const char* topic, ...){
                 int32_t* data = va_arg(arguments, int32_t*);
                 publish_s32(data, txMsg.length);
                 break;
+            }
+            
+            default:
+            {
+                
             }
         }
         
