@@ -14,8 +14,7 @@ typedef enum formatspecifier{
     eU16 = 4,
     eS16 = 5,
     eU32 = 6,
-    eS32 = 7,
-    eFLOAT = 8
+    eS32 = 7
 }FormatSpecifier;
 
 typedef struct{
@@ -166,8 +165,6 @@ void DIS_publish(const char* topic, ...){
                     txMsg.formatSpecifiers[i] = eSTRING;
                     strIndex++;
                 }
-            }else if(topic[strIndex] == 'f'){
-                txMsg.formatSpecifiers[i] = eFLOAT;
             }
             strIndex++;
         }else{
@@ -236,12 +233,6 @@ void DIS_publish(const char* topic, ...){
             {
                 int32_t* data = va_arg(arguments, int32_t*);
                 publish_s32(data, txMsg.length);
-                break;
-            }
-            
-            case eFLOAT:
-            {
-                
                 break;
             }
         }
@@ -698,12 +689,6 @@ uint16_t DIS_getElements(uint16_t element, void* destArray){
                 data[dataIndex] |= (int32_t)rxMsg.data[currentIndex + i] << 24;
                 i++;
             }
-            break;
-        }
-        
-        case eFLOAT:
-        {
-            
             break;
         }
     }
