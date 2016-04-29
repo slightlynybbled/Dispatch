@@ -23,7 +23,7 @@ typedef struct{
     uint32_t length8bit;
     FormatSpecifier formatSpecifiers[MAX_NUM_OF_FORMAT_SPECIFIERS];
     
-    uint8_t data[MAX_TRANSMIT_MESSAGE_LEN];
+    uint8_t data[MAX_RECEIVE_MESSAGE_LEN];
 }Message;
 
 typedef struct {
