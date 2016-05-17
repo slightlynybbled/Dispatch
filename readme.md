@@ -82,7 +82,7 @@ When an item is published to the endpoint "foo", then `mySubscriberFunction` is 
     
     /* retrieve element 0, or the first element, into 'myData0Received'
         and save the array length into 'length' */
-    uint8_t length = DIS_getElements(0, myDataReceived);
+    uint8_t length = DIS_getElements(0, myData0Received);
     
     /* retrieve element 1 into 'myData1Received' */
     DIS_getElements(1, myData1Received);
