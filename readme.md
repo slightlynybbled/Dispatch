@@ -9,6 +9,10 @@ which is described by the author as a publish-subscribe model.
 
 More details may be found at [for(embed)](http://www.forembed.com/introducing-dispatch.html).
 
+There is a sister project called [PyDispatch](https://github.com/slightlynybbled/PyDispatch), which
+is a Python implementation for the PC-side.  The sister project provides a Python interface useful
+for transferring data to and from the PC using the Dispatch protocol.
+
 # Project Maturity #
 
 The project now has solid unit test integration tests.  In some cases,
