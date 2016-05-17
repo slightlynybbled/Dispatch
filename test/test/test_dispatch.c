@@ -79,7 +79,7 @@ void test_publish_string(void){
                             'f', 'o', 'o', 0,
                             1, 3, 0, 1, 
                             'b','a','r',
-                            128, 37,
+                            126, 22,
                             END_OF_FRAME
                         };
 
@@ -97,7 +97,7 @@ void test_publish_1_u8(void){
                             'f', 'o', 'o', 0,
                             1, 1, 0, 2, 
                             10,
-                            83, 56,
+                            82, 46,
                             END_OF_FRAME
                         };
 
@@ -117,7 +117,7 @@ void test_publish_2x3_u8u16(void){
                             2, 3, 0, 0x42,  
                             10, 20, 30,
                             40, 0, 50, 0, 60, 0,
-                            95, 31,
+                            93, 5,
                             END_OF_FRAME
                         };
 
@@ -128,7 +128,6 @@ void test_publish_2x3_u8u16(void){
     
     uint16_t i;
     for(i = 0; i < 22; i++){
-        printf("(%d, %d) ", i, writeData[i]);
         TEST_ASSERT_EQUAL_INT(dataTest[i], writeData[i]);
     }
 }
@@ -141,7 +140,7 @@ void test_publish_3x3_u8u16u32(void){
                             10, 20, 30,
                             40, 0, 50, 0, 60, 0,
                             70, 0, 0, 0, 80, 0, 0, 0, 90, 0, 0, 0,
-                            87, 250,
+                            84, 186,
                             END_OF_FRAME
                         };
 
@@ -162,10 +161,10 @@ void test_publish_3x3_s8s16s32(void){
                         {   START_OF_FRAME,
                             'f', 'o', 'o', 0,
                             3, 3, 0, 0x53, 0x07, 
-                            246, ESC ^ 0x20, 236, 226, // <= one of these happens to be an esc char
+                            246, 246 ^ 0x20, 236, 226, // <= one of these happens to be an esc char
                             216, 255, 206, 255, 196, 255,
                             186, 255, 255, 255, 176, 255, 255, 255, 166, 255, 255, 255,
-                            234, 234,
+                            214, 236,           // <= remember that ESC, SOF, and EOF are done *after* the checksum is calculated
                             END_OF_FRAME
                         };
 
@@ -198,7 +197,7 @@ void test_subscribe_and_process(void){
                             'f', 'o', 'o', 0,
                             1, 1, 0, 2, 
                             10,
-                            83, 56,
+                            82, 46,
                             END_OF_FRAME
                         };
     int i;
@@ -226,7 +225,7 @@ void test_subscribe_unsigned(void){
                             10, 20, 30,
                             40, 0, 50, 0, 60, 0,
                             70, 0, 0, 0, 80, 0, 0, 0, 90, 0, 0, 0,
-                            87, 250,
+                            84, 186,
                             END_OF_FRAME
                         };
     uint16_t i;
@@ -258,7 +257,7 @@ void test_subscribe_signed(void){
                             246, ESC ^ 0x20, 236, 226, // <= one of these happens to be an esc char
                             216, 255, 206, 255, 196, 255,
                             186, 255, 255, 255, 176, 255, 255, 255, 166, 255, 255, 255,
-                            234, 234,
+                            214, 236,
                             END_OF_FRAME
                         };
     uint16_t i;
