@@ -9,8 +9,7 @@
 static uint8_t rxFrame[RX_FRAME_LENGTH];
 static uint16_t rxFrameIndex = 0;
 
-static uint16_t f16Sum1 = 0x00ff;
-static uint16_t f16Sum2 = 0x00ff;
+static uint16_t f16Sum1 = 0, f16Sum2 = 0;
 
 void FRM_pushByte(uint8_t data);
 uint16_t FRM_fletcher16(uint8_t* data, size_t bytes);
@@ -26,20 +25,17 @@ void FRM_init(void){
     uint8_t dataToSend = START_OF_FRAME;
     channelWriteFunctPtr(&dataToSend, 1);
     
-    f16Sum1 = f16Sum2 = 0x00ff;
+    f16Sum1 = f16Sum2 = 0;
 }
 
 void FRM_data(uint8_t data){
-    f16Sum1 += (uint16_t)data;
-    f16Sum2 += f16Sum1;
+    f16Sum1 = (f16Sum1 + (uint16_t)data) & 0xff;
+    f16Sum2 = (f16Sum2 + f16Sum1) & 0xff;
     
     FRM_pushByte(data);
 }
 
 void FRM_finish(void){
-	f16Sum1 = (f16Sum1 & 0x00ff) + (f16Sum1 >> 8);
-	f16Sum2 = (f16Sum2 & 0x00ff) + (f16Sum2 >> 8);
-    
     FRM_pushByte(f16Sum1);
     FRM_pushByte(f16Sum2);
     
@@ -157,18 +153,15 @@ uint16_t FRM_pull(uint8_t* data){
 }
 
 uint16_t FRM_fletcher16(uint8_t* data, size_t length){
-	uint16_t sum1 = 0x00ff;
-	uint16_t sum2 = 0x00ff;
+	uint16_t sum1 = 0;
+	uint16_t sum2 = 0;
     
     uint16_t i = 0;
     while(i < length){
-        sum1 += (uint16_t)data[i];
-        sum2 += sum1;
+        sum1 = (sum1 + (uint16_t)data[i]) & 0xff;
+        sum2 = (sum2 + sum1) & 0xff;
         i++;
     }
-    
-	sum1 = (sum1 & 0x00ff) + (sum1 >> 8);
-	sum2 = (sum2 & 0x00ff) + (sum2 >> 8);
     
     uint16_t checksum = (sum2 << 8) | sum1;
     

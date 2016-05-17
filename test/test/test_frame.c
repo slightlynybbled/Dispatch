@@ -115,7 +115,7 @@ void test_mock_write_esc(void){
                             2, ESC, END_OF_FRAME ^ ESC_XOR,
                             4, ESC, ESC ^ ESC_XOR,
                             6, 7, 8, 9,
-                            146, 117, 
+                            144, 100, 
                             END_OF_FRAME};
     
     FRM_init();
@@ -136,7 +136,7 @@ void test_mock_read(void){
                                 2, ESC, END_OF_FRAME ^ ESC_XOR,
                                 4, ESC, ESC ^ ESC_XOR,
                                 6, 7, 8, 9,
-                                146, 117, 
+                                144, 100, 
                                 END_OF_FRAME};
                                 
     uint8_t dataTest[] = {0, START_OF_FRAME, 2, END_OF_FRAME, 4, ESC, 6, 7, 8, 9};
@@ -167,7 +167,7 @@ void test_mock_read_extra_bytes(void){
                                     2, ESC, END_OF_FRAME ^ ESC_XOR,
                                     4, ESC, ESC ^ ESC_XOR,
                                     6, 7, 8, 9,
-                                    146, 117, 
+                                    144, 100, 
                                     END_OF_FRAME, 
                                     30, 40, START_OF_FRAME};
                                 
