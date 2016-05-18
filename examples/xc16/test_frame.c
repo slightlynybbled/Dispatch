@@ -33,7 +33,7 @@ void myProcess(void){
     
     FRM_init();
     for(i=0; i < 64; i++){
-        FRM_data(i);
+        FRM_push(i);
     }
     FRM_finish();
     
