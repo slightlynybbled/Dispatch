@@ -11,8 +11,8 @@ static uint16_t rxFrameIndex = 0;
 
 static uint16_t f16Sum1 = 0, f16Sum2 = 0;
 
-void FRM_pushToChannel(uint8_t data);
-uint16_t FRM_fletcher16(uint8_t* data, size_t bytes);
+static void FRM_pushToChannel(uint8_t data);
+static uint16_t FRM_fletcher16(uint8_t* data, size_t bytes);
 
 uint16_t (*channelReadableFunctPtr)();
 uint16_t (*channelWriteableFunctPtr)();
@@ -34,24 +34,23 @@ void FRM_push(uint8_t data){
 }
 
 void FRM_finish(void){
+    uint8_t dataToSend = END_OF_FRAME;
+    
     FRM_pushToChannel(f16Sum1);
     FRM_pushToChannel(f16Sum2);
     
-    uint8_t dataToSend = END_OF_FRAME;
     channelWriteFunctPtr(&dataToSend, 1);
 }
 
 void FRM_pushToChannel(uint8_t data){
-    uint8_t byte = data;
-    
     /* add proper escape sequences */
-    if((byte == START_OF_FRAME) || (byte == END_OF_FRAME) || (byte == ESC)){
+    if((data == START_OF_FRAME) || (data == END_OF_FRAME) || (data == ESC)){
         uint8_t escChar = ESC;
-        uint8_t escData = byte ^ ESC_XOR;
+        uint8_t escData = data ^ ESC_XOR;
         channelWriteFunctPtr(&escChar, 1);
         channelWriteFunctPtr(&escData, 1);
     }else{
-        channelWriteFunctPtr(&byte, 1);
+        channelWriteFunctPtr(&data, 1);
     }
 }
 
@@ -72,7 +71,7 @@ uint16_t FRM_pull(uint8_t* data){
             sofIndex = i;
             break;
         }else{
-            rxFrame[i] = 0; // clear the byte that isn't the START_OF_FRAME
+            rxFrame[i] = 0; /* clear the byte that isn't the START_OF_FRAME */
         }
         i++;
     }
@@ -89,10 +88,14 @@ uint16_t FRM_pull(uint8_t* data){
     
     /* ensure that the start of frame and the end of frame are both present */
     if(((rxFrame[0] == START_OF_FRAME) || (sofIndex > 0)) && (eofIndex != 0)){
+        int16_t frameIndex = sofIndex;
+        uint16_t checksum;
+        uint16_t check;
+        
         /* extract the received frame and shift the remainder of the
          * bytes into the beginning of the frame */
         i = 0;
-        int16_t frameIndex = sofIndex;
+        
         rxFrame[frameIndex] = 0;
         frameIndex++;
         while(frameIndex < eofIndex){
@@ -136,9 +139,9 @@ uint16_t FRM_pull(uint8_t* data){
         
         /* check the data integrity using the last two bytes as
          * the fletcher16 checksum */
-        uint16_t checksum = data[length - 2] | (data[length - 1] << 8);
+        checksum = data[length - 2] | (data[length - 1] << 8);
         length -= 2;
-        uint16_t check = FRM_fletcher16(data, length);
+        check = FRM_fletcher16(data, length);
         if(check != checksum){
             length = 0;
         }
@@ -148,8 +151,7 @@ uint16_t FRM_pull(uint8_t* data){
 }
 
 uint16_t FRM_fletcher16(uint8_t* data, size_t length){
-	uint16_t sum1 = 0;
-	uint16_t sum2 = 0;
+	uint16_t sum1 = 0, sum2 = 0, checksum;
     
     uint16_t i = 0;
     while(i < length){
@@ -158,7 +160,7 @@ uint16_t FRM_fletcher16(uint8_t* data, size_t length){
         i++;
     }
     
-    uint16_t checksum = (sum2 << 8) | sum1;
+    checksum = (sum2 << 8) | sum1;
     
 	return checksum;
 }

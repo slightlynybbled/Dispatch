@@ -23,7 +23,7 @@ int main(void) {
     FRM_assignChannelWrite(&UART_write);
     
     while(1){
-        __delay_ms(500);
+        __delay32(6000000);
         myProcess();
     }
 }
