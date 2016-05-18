@@ -24,10 +24,8 @@ int main(void) {
 
 void myProcess(void){
     uint8_t i;
-    uint8_t iArr[64];
-    for(i=0; i < 64; i++){
-        iArr[i] = i;
-    }
     
-    UART_write(iArr, 64);
+    for(i=0; i < 64; i++){
+        UART_write(&i, 1);
+    }
 }
