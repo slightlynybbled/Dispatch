@@ -19,8 +19,8 @@ void UART_init(void){
      * U1BRG = (12000000/(16*57600)) - 1 = 12.02 = 12
      */
     U1BRG = 12;
-    U1MODE = 0x0000;    // TX/RX only, standard mode
-    U1STA = 0x0000;     // enable 
+    U1MODE = 0x0000;    /* TX/RX only, standard mode */
+    U1STA = 0x0000;     /* enable */
     
     /* uart interrupts */
     IFS0bits.U1TXIF = IFS0bits.U1RXIF = 0;
@@ -45,7 +45,7 @@ void UART_write(uint8_t* data, uint16_t length){
     uint32_t i = 0;
     
     while(i < length){
-        while(UART_writeable() == 0);   // wait for any current writes to clear
+        while(UART_writeable() == 0);   /* wait for any current writes to clear */
         
         BUF_write8((Buffer*)&txBuf, data[i]);
         i++;
