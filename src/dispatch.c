@@ -77,35 +77,35 @@ void DIS_publish(const char* topic, ...){
     /* go through the first argument and extract the topic */
     uint16_t strIndex = 0;
     while((strIndex < len) && (topic[strIndex] != ',') && (topic[strIndex] != ':')){
-        FRM_data(topic[strIndex]);  // send the topic string
+        FRM_push(topic[strIndex]);  // send the topic string
         strIndex++;
     }
-    FRM_data(0);    // send the \0 string terminator
+    FRM_push(0);    // send the \0 string terminator
     
     dimensions = commaCount;
     if(dimensions == 0){
         /* if the dimension == 0, then this is a string,
          *  simply transmit the string */
-        FRM_data(1);
+        FRM_push(1);
         
         char* data = va_arg(arguments, char*);
         
         /* send the length */
         length = strlen(data);
-        FRM_data((uint8_t)(length & 0x00ff));
-        FRM_data((uint8_t)((length & 0xff00) >> 8));
+        FRM_push((uint8_t)(length & 0x00ff));
+        FRM_push((uint8_t)((length & 0xff00) >> 8));
         
         /* send the format specifier for a string */
-        FRM_data(eSTRING);
+        FRM_push(eSTRING);
         
         /* finally, send the string */
         for(i = 0; i < length; i++){
-            FRM_data(data[i]);
+            FRM_push(data[i]);
         }
     }else{
         /* if the code gets here, then there is definitely not a string
          * being transmitted but one or more numeric values */
-        FRM_data(dimensions);
+        FRM_push(dimensions);
 
         /* determine if there is more of the string left to process and, if
          * there is, then process the index */
@@ -134,8 +134,8 @@ void DIS_publish(const char* topic, ...){
         if(length < 1)
             length = 1;
         
-        FRM_data((uint8_t)(length & 0x00ff));
-        FRM_data((uint8_t)((length & 0xff00) >> 8));
+        FRM_push((uint8_t)(length & 0x00ff));
+        FRM_push((uint8_t)((length & 0xff00) >> 8));
 
         /* check the format specifiers */
         i = 0;
@@ -203,7 +203,7 @@ void DIS_publish(const char* topic, ...){
 
         uint16_t fsArrayLength = ((i + 1) >> 1);
         for(i = 0; i < fsArrayLength; i++){
-            FRM_data(fsArray[i]);
+            FRM_push(fsArray[i]);
         }
 
         /* at this point:
@@ -219,7 +219,7 @@ void DIS_publish(const char* topic, ...){
                     
                     uint8_t j = 0;
                     while(j < length){
-                        FRM_data(data[j]);
+                        FRM_push(data[j]);
                         j++;
                     }
                     
@@ -232,7 +232,7 @@ void DIS_publish(const char* topic, ...){
                     
                     uint8_t j = 0;
                     while(j < length){
-                        FRM_data((uint8_t)data[j]);
+                        FRM_push((uint8_t)data[j]);
                         j++;
                     }
                                         
@@ -245,8 +245,8 @@ void DIS_publish(const char* topic, ...){
                     
                     uint8_t j = 0;
                     while(j < length){
-                        FRM_data((uint8_t)(data[j] & 0x00ff));
-                        FRM_data((uint8_t)((data[j] & 0xff00) >> 8));
+                        FRM_push((uint8_t)(data[j] & 0x00ff));
+                        FRM_push((uint8_t)((data[j] & 0xff00) >> 8));
                         j++;
                     }
                     
@@ -259,8 +259,8 @@ void DIS_publish(const char* topic, ...){
                     
                     uint8_t j = 0;
                     while(j < length){
-                        FRM_data((uint8_t)(data[j] & 0x00ff));
-                        FRM_data((uint8_t)((data[j] & 0xff00) >> 8));
+                        FRM_push((uint8_t)(data[j] & 0x00ff));
+                        FRM_push((uint8_t)((data[j] & 0xff00) >> 8));
                         j++;
                     }
                     
@@ -273,10 +273,10 @@ void DIS_publish(const char* topic, ...){
                     
                     uint8_t j = 0;
                     while(j < length){
-                        FRM_data((uint8_t)(data[j] & 0x000000ff));
-                        FRM_data((uint8_t)((data[j] & 0x0000ff00) >> 8));
-                        FRM_data((uint8_t)((data[j] & 0x00ff0000) >> 16));
-                        FRM_data((uint8_t)((data[j] & 0xff000000) >> 24));
+                        FRM_push((uint8_t)(data[j] & 0x000000ff));
+                        FRM_push((uint8_t)((data[j] & 0x0000ff00) >> 8));
+                        FRM_push((uint8_t)((data[j] & 0x00ff0000) >> 16));
+                        FRM_push((uint8_t)((data[j] & 0xff000000) >> 24));
                         j++;
                     }
                     
@@ -289,10 +289,10 @@ void DIS_publish(const char* topic, ...){
                     
                     uint8_t j = 0;
                     while(j < length){
-                        FRM_data((uint8_t)(data[j] & 0x000000ff));
-                        FRM_data((uint8_t)((data[j] & 0x0000ff00) >> 8));
-                        FRM_data((uint8_t)((data[j] & 0x00ff0000) >> 16));
-                        FRM_data((uint8_t)((data[j] & 0xff000000) >> 24));
+                        FRM_push((uint8_t)(data[j] & 0x000000ff));
+                        FRM_push((uint8_t)((data[j] & 0x0000ff00) >> 8));
+                        FRM_push((uint8_t)((data[j] & 0x00ff0000) >> 16));
+                        FRM_push((uint8_t)((data[j] & 0xff000000) >> 24));
                         j++;
                     }
                     

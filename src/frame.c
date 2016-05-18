@@ -11,7 +11,7 @@ static uint16_t rxFrameIndex = 0;
 
 static uint16_t f16Sum1 = 0, f16Sum2 = 0;
 
-void FRM_pushByte(uint8_t data);
+void FRM_pushToChannel(uint8_t data);
 uint16_t FRM_fletcher16(uint8_t* data, size_t bytes);
 
 uint16_t (*channelReadableFunctPtr)();
@@ -26,24 +26,22 @@ void FRM_init(void){
     f16Sum1 = f16Sum2 = 0;
 }
 
-void FRM_data(uint8_t data){
+void FRM_push(uint8_t data){
     f16Sum1 = (f16Sum1 + (uint16_t)data) & 0xff;
     f16Sum2 = (f16Sum2 + f16Sum1) & 0xff;
     
-    FRM_pushByte(data);
+    FRM_pushToChannel(data);
 }
 
 void FRM_finish(void){
-    FRM_pushByte(f16Sum1);
-    FRM_pushByte(f16Sum2);
+    FRM_pushToChannel(f16Sum1);
+    FRM_pushToChannel(f16Sum2);
     
-    /* wait for send buffer to clear, then write the END_OF_FRAME */
-    while(channelWriteableFunctPtr() == 0);
     uint8_t dataToSend = END_OF_FRAME;
     channelWriteFunctPtr(&dataToSend, 1);
 }
 
-void FRM_pushByte(uint8_t data){
+void FRM_pushToChannel(uint8_t data){
     uint8_t byte = data;
     
     /* add proper escape sequences */
