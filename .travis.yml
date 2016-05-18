@@ -1,3 +1,3 @@
 language: c
 
-script: cd test; mkdir test/support; mkdir build; rake test:all
+script: cd test_gcc; mkdir test/support; mkdir build; rake test:all
