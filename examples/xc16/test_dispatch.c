@@ -46,6 +46,12 @@ void mySubscriberFunction(void){
     
     i++;
     
+    uint16_t j;
+    uint16_t jArr[64] = {0};
+    for(j = 0; j < 64; j++){
+        jArr[j] = j;
+    }
+    
     /* publish i back to the sender to 'close the loop' */
-    DIS_publish("i,u16", &i);
+    DIS_publish("i:64,u16", jArr);
 }
