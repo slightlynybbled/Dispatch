@@ -20,8 +20,6 @@ void (*channelReadFunctPtr)(uint8_t* data, uint16_t length);
 void (*channelWriteFunctPtr)(uint8_t* data, uint16_t length);
 
 void FRM_init(void){
-    /* wait for send buffer to clear, then write the START_OF_FRAME */
-    while((*channelWriteableFunctPtr)() == 0);
     uint8_t dataToSend = START_OF_FRAME;
     channelWriteFunctPtr(&dataToSend, 1);
     
@@ -46,17 +44,16 @@ void FRM_finish(void){
 }
 
 void FRM_pushByte(uint8_t data){
-    /* ensure that at least two bytes can be written */
-    while(channelWriteableFunctPtr() < 2);
+    uint8_t byte = data;
     
     /* add proper escape sequences */
-    if((data == START_OF_FRAME) || (data == END_OF_FRAME) || (data == ESC)){
+    if((byte == START_OF_FRAME) || (byte == END_OF_FRAME) || (byte == ESC)){
         uint8_t escChar = ESC;
-        uint8_t escData = data ^ ESC_XOR;
+        uint8_t escData = byte ^ ESC_XOR;
         channelWriteFunctPtr(&escChar, 1);
         channelWriteFunctPtr(&escData, 1);
     }else{
-        channelWriteFunctPtr(&data, 1);
+        channelWriteFunctPtr(&byte, 1);
     }
 }
 
