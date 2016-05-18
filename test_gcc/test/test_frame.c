@@ -56,7 +56,7 @@ void test_mock_writeable(void)
 void test_push_byte_normal(void)
 {
     uint8_t data = 10;
-    FRM_pushByte(data);
+    FRM_pushToChannel(data);
     
     TEST_ASSERT_EQUAL_INT(data, writeData[0]);
 }
@@ -64,7 +64,7 @@ void test_push_byte_normal(void)
 void test_push_byte_SOF(void)
 {
     uint8_t data = START_OF_FRAME;
-    FRM_pushByte(data);
+    FRM_pushToChannel(data);
     
     TEST_ASSERT_EQUAL_INT(ESC, writeData[0]);
     TEST_ASSERT_EQUAL_INT(START_OF_FRAME ^ ESC_XOR, writeData[1]);
@@ -73,7 +73,7 @@ void test_push_byte_SOF(void)
 void test_push_byte_EOF(void)
 {
     uint8_t data = END_OF_FRAME;
-    FRM_pushByte(data);
+    FRM_pushToChannel(data);
     
     TEST_ASSERT_EQUAL_INT(ESC, writeData[0]);
     TEST_ASSERT_EQUAL_INT(END_OF_FRAME ^ ESC_XOR, writeData[1]);
@@ -82,7 +82,7 @@ void test_push_byte_EOF(void)
 void test_push_byte_ESC(void)
 {
     uint8_t data = ESC;
-    FRM_pushByte(data);
+    FRM_pushToChannel(data);
     
     TEST_ASSERT_EQUAL_INT(ESC, writeData[0]);
     TEST_ASSERT_EQUAL_INT(ESC ^ ESC_XOR, writeData[1]);
@@ -98,7 +98,7 @@ void test_mock_frame_write(void){
     
     FRM_init();
     for(i=0; i < 10; i++){
-        FRM_data(dataIn[i]);
+        FRM_push(dataIn[i]);
     }
     FRM_finish();
     
@@ -120,7 +120,7 @@ void test_mock_write_esc(void){
     
     FRM_init();
     for(i=0; i < 10; i++){
-        FRM_data(dataIn[i]);
+        FRM_push(dataIn[i]);
     }
     FRM_finish();
     
