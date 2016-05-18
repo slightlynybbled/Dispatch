@@ -18,7 +18,7 @@ void FRM_init(void);
  * 
  * @param data a single byte of data
  */
-void FRM_data(uint8_t data);
+void FRM_push(uint8_t data);
 
 /**
  * Use to finish a frame
