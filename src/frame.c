@@ -27,10 +27,10 @@ void FRM_init(void){
 }
 
 void FRM_push(uint8_t data){
+    FRM_pushToChannel(data);
+        
     f16Sum1 = (f16Sum1 + (uint16_t)data) & 0xff;
     f16Sum2 = (f16Sum2 + f16Sum1) & 0xff;
-    
-    FRM_pushToChannel(data);
 }
 
 void FRM_finish(void){

@@ -8,6 +8,8 @@ volatile static Buffer txBuf;
 volatile static Buffer rxBuf;
 volatile static uint8_t txBufArr[TX_BUF_LENGTH];
 volatile static uint8_t rxBufArr[RX_BUF_LENGTH];
+volatile static uint8_t writeLock = 0;
+volatile static uint8_t readLock = 0;
 
 void UART_init(void){
     ANSBbits.ANSB2 = ANSBbits.ANSB7 = 0;
@@ -46,8 +48,11 @@ void UART_write(uint8_t* data, uint16_t length){
     
     while(i < length){
         while(UART_writeable() == 0);   /* wait for any current writes to clear */
-        
+
+        writeLock = 1;        
         BUF_write8((Buffer*)&txBuf, data[i]);
+        writeLock = 0;
+        
         i++;
     }
     
@@ -55,7 +60,9 @@ void UART_write(uint8_t* data, uint16_t length){
      * transmit; the interrupt routine will finish sending
      * the remainder of the buffer */
     while((U1STAbits.UTXBF == 0) && (BUF_status((Buffer*)&txBuf) != BUFFER_EMPTY)){
+        writeLock = 1;
         U1TXREG = BUF_read8((Buffer*)&txBuf);
+        writeLock = 0;
     }
 }
 
@@ -68,12 +75,14 @@ uint16_t UART_writeable(void){
 }
 
 void _ISR _U1TXInterrupt(void){
-    /* read the byte(s) to be transmitted from the tx circular
-     * buffer and transmit using the hardware register */
-    while((BUF_status((Buffer*)&txBuf) != BUFFER_EMPTY)
-            && (U1STAbits.UTXBF == 0)){
+    if(writeLock == 0){
+        /* read the byte(s) to be transmitted from the tx circular
+         * buffer and transmit using the hardware register */
+        while((BUF_status((Buffer*)&txBuf) != BUFFER_EMPTY)
+                && (U1STAbits.UTXBF == 0)){
 
-        U1TXREG = BUF_read8((Buffer*)&txBuf);
+            U1TXREG = BUF_read8((Buffer*)&txBuf);
+        }
     }
     
     IFS0bits.U1TXIF = 0;
