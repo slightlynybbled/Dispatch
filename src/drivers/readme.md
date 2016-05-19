@@ -3,7 +3,6 @@
 The purpose of this directory is to hold drivers for different processor architectures.  These
 drivers should implement, at minimum, the following functions or their equivalent:
 
-    ```
     /**
      * Reads data from the UART receive circular buffer
      * 
@@ -33,19 +32,16 @@ drivers should implement, at minimum, the following functions or their equivalen
      * @return the number of bytes that can be written
      */
     uint16_t writeable(void);
-    ```
     
 # Driver Initialization #
 
 In addition, it is expected that some sort of initialization function will be necessary to
 setup the hardware registers.  As a result, most drivers will have an initialization function:
 
-    ```
     /**
      * Initializes the UART
      */
     void init(void);
-    ```
     
 # Additional Considerations #
 
