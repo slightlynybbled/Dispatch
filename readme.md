@@ -69,7 +69,7 @@ may be omitted.
 
     uint8_t myData0[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
     uint16_t myData1[] = {10, 11, 12, 13, 14, 15, 16, 17, 18, 19};
-    DIS_publish("foo:10,u8,u16", myData);
+    DIS_publish("foo:10,u8,u16", myData0, myData1);
     
 All subscribers to the endpoint "foo" will be called when the above statement is executed.
     
