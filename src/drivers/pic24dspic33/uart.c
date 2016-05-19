@@ -38,9 +38,21 @@ void UART_read(uint8_t* data, uint16_t length){
     uint32_t i = 0;
     
     while(i < length){
+        readLock = 1;
         data[i] = BUF_read8((Buffer*)&rxBuf);
+        readLock = 0;
         i++;
     }
+    
+    /* if the read lock was active and something was received, 
+     * then the RX interrupt was not properly executed and the
+     * code must read the U1RXBUF into the circular buffer */
+    readLock = 1;
+    while((BUF_status((Buffer*)&rxBuf) != BUFFER_FULL)
+            && (U1STAbits.URXDA)){
+        BUF_write8((Buffer*)&rxBuf, U1RXREG);
+    }
+    readLock = 0;
 }
 
 void UART_write(uint8_t* data, uint16_t length){
@@ -59,11 +71,11 @@ void UART_write(uint8_t* data, uint16_t length){
     /* if the transmit isn't active, then kick-start the
      * transmit; the interrupt routine will finish sending
      * the remainder of the buffer */
+    writeLock = 1;
     while((U1STAbits.UTXBF == 0) && (BUF_status((Buffer*)&txBuf) != BUFFER_EMPTY)){
-        writeLock = 1;
         U1TXREG = BUF_read8((Buffer*)&txBuf);
-        writeLock = 0;
     }
+    writeLock = 0;
 }
 
 uint16_t UART_readable(void){
@@ -91,9 +103,11 @@ void _ISR _U1TXInterrupt(void){
 void _ISR _U1RXInterrupt(void){
     /* read the received byte(s) from the register and write
      * to the rx circular buffer */
-    while((BUF_status((Buffer*)&rxBuf) != BUFFER_FULL)
-            && (U1STAbits.URXDA)){
-        BUF_write8((Buffer*)&rxBuf, U1RXREG);
+    if(readLock == 0){
+        while((BUF_status((Buffer*)&rxBuf) != BUFFER_FULL)
+                && (U1STAbits.URXDA)){
+            BUF_write8((Buffer*)&rxBuf, U1RXREG);
+        }
     }
     
     
