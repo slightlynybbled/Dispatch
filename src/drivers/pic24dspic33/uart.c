@@ -44,15 +44,10 @@ void UART_read(uint8_t* data, uint16_t length){
         i++;
     }
     
-    /* if the read lock was active and something was received, 
-     * then the RX interrupt was not properly executed and the
-     * code must read the U1RXBUF into the circular buffer */
-    readLock = 1;
-    while((BUF_status((Buffer*)&rxBuf) != BUFFER_FULL)
-            && (U1STAbits.URXDA)){
-        BUF_write8((Buffer*)&rxBuf, U1RXREG);
-    }
-    readLock = 0;
+    /* if an rx occurred during the readLock, then there is data in the rx
+     * register that is not processed, so kick the interrupt */
+    if(U1STAbits.URXDA)
+        IFS0bits.U1RXIF = 1;
 }
 
 void UART_write(uint8_t* data, uint16_t length){
@@ -71,19 +66,37 @@ void UART_write(uint8_t* data, uint16_t length){
     /* if the transmit isn't active, then kick-start the
      * transmit; the interrupt routine will finish sending
      * the remainder of the buffer */
-    writeLock = 1;
-    while((U1STAbits.UTXBF == 0) && (BUF_status((Buffer*)&txBuf) != BUFFER_EMPTY)){
-        U1TXREG = BUF_read8((Buffer*)&txBuf);
+    if(U1STAbits.UTXBF == 0){
+        IFS0bits.U1TXIF = 1;
     }
-    writeLock = 0;
 }
 
 uint16_t UART_readable(void){
-    return (uint16_t)BUF_fullSlots((Buffer*)&rxBuf);
+    uint16_t readable;
+    
+    readLock = 1;
+    readable = (uint16_t)BUF_fullSlots((Buffer*)&rxBuf);
+    readLock = 0;
+    
+    /* if an rx occurred during the readLock, then there is data in the rx
+     * register that is not processed, so kick the interrupt */
+    if(U1STAbits.URXDA)
+        IFS0bits.U1RXIF = 1;
+    
+    return readable;
 }
 
 uint16_t UART_writeable(void){
-    return (uint16_t)BUF_emptySlots((Buffer*)&txBuf);
+    uint16_t writeable;
+    
+    writeLock = 1;
+    writeable = (uint16_t)BUF_emptySlots((Buffer*)&txBuf);
+    writeLock = 0;
+    
+    /* if a tx occurred during the writeLock, then there 
+     * is data that needs to be transmitted, kick the transmit interrupt */
+    
+    return writeable;
 }
 
 void _ISR _U1TXInterrupt(void){
