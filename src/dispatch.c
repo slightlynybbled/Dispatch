@@ -59,7 +59,7 @@ void DIS_publish(const char* topic, ...){
     
     uint16_t i;
     for(i = 0; i < MAX_NUM_OF_FORMAT_SPECIFIERS; i++){
-        formatSpecifiers[i] = 0;
+        formatSpecifiers[i] = eNONE;
     }
     
     /* get the num of args by counting the commas */
@@ -373,9 +373,9 @@ void DIS_process(void){
         
         for(i = 0; i < rxMsg.dimensions; i++){
             if((i & 1) == 0){
-                rxMsg.formatSpecifiers[i] = data[dataIndex] & 0x0f;
+                rxMsg.formatSpecifiers[i] = (FormatSpecifier)(data[dataIndex] & 0x0f);
             }else{
-                rxMsg.formatSpecifiers[i] = (data[dataIndex++] & 0xf0) >> 4;
+                rxMsg.formatSpecifiers[i] = (FormatSpecifier)((data[dataIndex++] & 0xf0) >> 4);
             }
             
             if((rxMsg.formatSpecifiers[i] == eSTRING)
