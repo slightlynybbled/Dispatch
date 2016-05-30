@@ -91,6 +91,24 @@ void test_publish_string(void){
     }
 }
 
+void test_publish_string_using_using_DIS_publish_str(void){
+    uint8_t dataTest[WRITE_DATA_LENGTH] = 
+                        {   START_OF_FRAME,
+                            'f', 'o', 'o', 0,
+                            1, 3, 0, 1, 
+                            'b','a','r',
+                            126, 22,
+                            END_OF_FRAME
+                        };
+
+    DIS_publish_str("foo", "bar");
+    
+    uint16_t i;
+    for(i = 0; i < 15; i++){
+        TEST_ASSERT_EQUAL_INT(dataTest[i], writeData[i]);
+    }
+}
+
 void test_publish_1_u8(void){
     uint8_t dataTest[WRITE_DATA_LENGTH] = 
                         {   START_OF_FRAME,

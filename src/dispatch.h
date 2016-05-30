@@ -21,6 +21,16 @@ void DIS_init(void);
 void DIS_publish(const char* topic, ...);
 
 /**
+ * Publish a string to a particular topic
+ * 
+ * @param topic a text string that contains the topic, length,
+ * and format specifiers
+ * 
+ * @param str string pointer
+ */
+void DIS_publish_str(const char* topic, char* str);
+
+/**
  * Subscribe to a particular topic
  * 
  * @param topic a text string that contains the topic only

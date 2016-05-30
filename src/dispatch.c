@@ -312,6 +312,41 @@ void DIS_publish(const char* topic, ...){
     FRM_finish();
 }
 
+void DIS_publish_str(const char* topic, char* str){
+    uint16_t length, i;
+    
+    FRM_init();
+    
+    /* load the topic into the frame */
+    i = 0;
+    while(topic[i] != 0){
+        FRM_push(topic[i]);
+        i++;
+    }
+    
+    /* send the string termination character */
+    FRM_push(0);
+    
+    /* if the dimension == 0, then this is a string,
+     *  simply transmit the string */
+    FRM_push(1);
+
+    /* send the length */
+    length = strlen(str);
+    FRM_push((uint8_t)(length & 0x00ff));
+    FRM_push((uint8_t)((length & 0xff00) >> 8));
+
+    /* send the format specifier for a string */
+    FRM_push(eSTRING);
+
+    /* finally, send the string */
+    for(i = 0; i < length; i++){
+        FRM_push(str[i]);
+    }
+    
+    FRM_finish();
+}
+
 void DIS_subscribe(const char* topic, void (*functPtr)()){
     /* find an empty subscription slot */
     uint16_t i;
