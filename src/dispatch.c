@@ -451,6 +451,56 @@ void DIS_publish_2u8(const char* topic, uint8_t* data0, uint8_t* data1){
     FRM_finish();
 }
 
+void DIS_publish_u16(const char* topic, uint16_t* data){
+    uint16_t dataLength = 1, strIndex = 0;
+    uint16_t i;
+    
+    FRM_init();
+    
+    /* load the topic into the frame */
+    strIndex = 0;
+    while((topic[strIndex] != 0) && (topic[strIndex] != ':')){
+        FRM_push(topic[strIndex]);
+        strIndex++;
+    }
+    
+    /* send the string termination character */
+    FRM_push(0);
+    
+    if(topic[strIndex] == ':'){
+        strIndex++;
+        
+        /* copy the numeric part of the string into numStr */
+        char numStr[8] = {0};
+        i = 0;
+        while(topic[strIndex] != 0){
+            numStr[i] = topic[strIndex];
+            i++;
+            strIndex++;
+        }
+        
+        /* convert the ASCII number into an integer */
+        dataLength = (uint16_t)atol(numStr);
+    }
+    
+    /* send the dimensions */
+    FRM_push(1);
+    
+    /* send the dataLength as two bytes */
+    FRM_push((uint8_t)(dataLength & 0x00ff));
+    FRM_push((uint8_t)((dataLength & 0xff00) >> 8));
+    
+    /* send the format specifier */
+    FRM_push((uint8_t)eU16);
+    
+    for(i = 0; i < dataLength; i++){
+        FRM_push((uint8_t)(data[i] & 0x00ff));
+        FRM_push((uint8_t)((data[i] & 0xff00) >> 8));
+    }
+    
+    FRM_finish();
+}
+
 void DIS_subscribe(const char* topic, void (*functPtr)()){
     /* find an empty subscription slot */
     uint16_t i;
