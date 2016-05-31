@@ -166,6 +166,27 @@ void test_publish_3_u8_using_DIS_publish_u8(void){
     }
 }
 
+void test_publish_1_u8u8_using_DIS_publish_2u8(void){
+    uint8_t dataTest[WRITE_DATA_LENGTH] = 
+                        {   START_OF_FRAME,
+                            'f', 'o', 'o', 0,
+                            2, 1, 0, 34, 
+                            10,
+                            20,
+                            135, 250,
+                            END_OF_FRAME
+                        };
+
+    uint8_t data0[1] = {10};
+    uint8_t data1[1] = {20};
+    DIS_publish_2u8("foo", data0, data1);
+    
+    uint16_t i;
+    for(i = 0; i < 13; i++){
+        TEST_ASSERT_EQUAL_INT(dataTest[i], writeData[i]);
+    }
+}
+
 void test_publish_2x3_u8u16(void){
     uint8_t dataTest[WRITE_DATA_LENGTH] = 
                         {   START_OF_FRAME,
