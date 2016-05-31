@@ -128,6 +128,44 @@ void test_publish_1_u8(void){
     }
 }
 
+void test_publish_1_u8_using_DIS_publish_u8(void){
+    uint8_t dataTest[WRITE_DATA_LENGTH] = 
+                        {   START_OF_FRAME,
+                            'f', 'o', 'o', 0,
+                            1, 1, 0, 2, 
+                            10,
+                            82, 46,
+                            END_OF_FRAME
+                        };
+
+    uint8_t data[1] = {10};
+    DIS_publish_u8("foo", data);
+    
+    uint16_t i;
+    for(i = 0; i < 13; i++){
+        TEST_ASSERT_EQUAL_INT(dataTest[i], writeData[i]);
+    }
+}
+
+void test_publish_3_u8_using_DIS_publish_u8(void){
+    uint8_t dataTest[WRITE_DATA_LENGTH] = 
+                        {   START_OF_FRAME,
+                            'f', 'o', 'o', 0,
+                            1, 3, 0, 2, 
+                            10, 20, 30,
+                            134, 36,
+                            END_OF_FRAME
+                        };
+
+    uint8_t data[3] = {10, 20, 30};
+    DIS_publish_u8("foo:3", data);
+    
+    uint16_t i;
+    for(i = 0; i < 15; i++){
+        TEST_ASSERT_EQUAL_INT(dataTest[i], writeData[i]);
+    }
+}
+
 void test_publish_2x3_u8u16(void){
     uint8_t dataTest[WRITE_DATA_LENGTH] = 
                         {   START_OF_FRAME,
