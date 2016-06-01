@@ -43,6 +43,15 @@ void DIS_publish_u8(const char* topic, uint8_t* data);
  * 
  * @param topic a text string that contains the topic and length
  * 
+ * @param data pointer to the first element in the array
+ */
+void DIS_publish_s8(const char* topic, int8_t* data);
+
+/**
+ * Publish data to a particular topic
+ * 
+ * @param topic a text string that contains the topic and length
+ * 
  * @param data0 pointer to the first element in the first array
  * @param data1 pointer to the first element in the second array
  */

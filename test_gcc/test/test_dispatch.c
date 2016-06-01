@@ -166,6 +166,26 @@ void test_publish_3_u8_using_DIS_publish_u8(void){
     }
 }
 
+void test_publish_3_s8_using_DIS_publish_s8(void){
+    uint8_t dataTest[WRITE_DATA_LENGTH] = 
+                        {   START_OF_FRAME,
+                            'f', 'o', 'o', 0,
+                            1, 3, 0, 3, 
+                            246, 246 ^ 0x20, 236, 226,
+                            15, 96,
+                            END_OF_FRAME
+                        };
+
+    int8_t data[3] = {-10, -20, -30};
+    DIS_publish_s8("foo:3", data);
+    
+    uint16_t i;
+    for(i = 0; i < 16; i++){
+        printf("(%d, %d) ", i, writeData[i]);
+        TEST_ASSERT_EQUAL_INT(dataTest[i], writeData[i]);
+    }
+}
+
 void test_publish_1_u8u8_using_DIS_publish_2u8(void){
     uint8_t dataTest[WRITE_DATA_LENGTH] = 
                         {   START_OF_FRAME,
