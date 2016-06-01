@@ -181,7 +181,6 @@ void test_publish_3_s8_using_DIS_publish_s8(void){
     
     uint16_t i;
     for(i = 0; i < 16; i++){
-        printf("(%d, %d) ", i, writeData[i]);
         TEST_ASSERT_EQUAL_INT(dataTest[i], writeData[i]);
     }
 }
@@ -203,6 +202,28 @@ void test_publish_1_u8u8_using_DIS_publish_2u8(void){
     
     uint16_t i;
     for(i = 0; i < 13; i++){
+        TEST_ASSERT_EQUAL_INT(dataTest[i], writeData[i]);
+    }
+}
+
+void test_publish_3_s8s8_using_DIS_publish_2s8(void){
+    uint8_t dataTest[WRITE_DATA_LENGTH] = 
+                        {   START_OF_FRAME,
+                            'f', 'o', 'o', 0,
+                            2, 3, 0, 51, 
+                            246, 246 ^ 0x20, 236, 226,
+                            216, 206, 196,
+                            170, 207,
+                            END_OF_FRAME
+                        };
+
+    int8_t data0[3] = {-10, -20, -30};
+    int8_t data1[3] = {-40, -50, -60};
+    DIS_publish_2s8("foo:3", data0, data1);
+    
+    uint16_t i;
+    for(i = 0; i < 19; i++){
+        printf("(%d, %d) ", i, writeData[i]);
         TEST_ASSERT_EQUAL_INT(dataTest[i], writeData[i]);
     }
 }
