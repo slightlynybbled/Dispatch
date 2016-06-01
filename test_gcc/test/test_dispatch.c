@@ -265,6 +265,25 @@ void test_publish_3_s16_using_DIS_publish_s16(void){
     }
 }
 
+void test_publish_3_u32_using_DIS_publish_u32(void){
+    uint8_t dataTest[WRITE_DATA_LENGTH] = 
+                        {   START_OF_FRAME,
+                            'f', 'o', 'o', 0,
+                            1, 3, 0, 6, 
+                            10, 0, 0, 0, 20, 0, 0, 0, 30, 0, 0, 0,
+                            138, 30,
+                            END_OF_FRAME
+                        };
+
+    uint32_t data[3] = {10, 20, 30};
+    DIS_publish_u32("foo:3", data);
+    
+    uint16_t i;
+    for(i = 0; i < 24; i++){
+        TEST_ASSERT_EQUAL_INT(dataTest[i], writeData[i]);
+    }
+}
+
 void test_publish_2x3_u8u16(void){
     uint8_t dataTest[WRITE_DATA_LENGTH] = 
                         {   START_OF_FRAME,
