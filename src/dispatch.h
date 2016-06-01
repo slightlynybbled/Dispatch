@@ -95,6 +95,15 @@ void DIS_publish_s16(const char* topic, int16_t* data);
 void DIS_publish_u32(const char* topic, uint32_t* data);
 
 /**
+ * Publish data to a particular topic
+ * 
+ * @param topic a text string that contains the topic and length
+ * 
+ * @param data pointer to the first element in the array
+ */
+void DIS_publish_s32(const char* topic, int32_t* data);
+
+/**
  * Subscribe to a particular topic
  * 
  * @param topic a text string that contains the topic only
