@@ -451,6 +451,25 @@ void DIS_publish_u16(const char* topic, uint16_t* data){
     FRM_finish();
 }
 
+void DIS_publish_s16(const char* topic, int16_t* data){
+    uint16_t i, dataLength;
+    
+    /* 'parseTopicString' will initialize the frame and push the topic,
+     * dimensions, and headers to the framing library, returning the data
+     * length */
+    dataLength = parseTopicString(topic, 1);
+    
+    /* send the format specifier */
+    FRM_push((uint8_t)eS16);
+    
+    for(i = 0; i < dataLength; i++){
+        FRM_push((uint8_t)(data[i] & 0x00ff));
+        FRM_push((uint8_t)((data[i] & 0xff00) >> 8));
+    }
+    
+    FRM_finish();
+}
+
 uint16_t parseTopicString(const char* topic, uint8_t dimensions){
     uint16_t dataLength = 1, strIndex = 0;
     uint16_t i;
