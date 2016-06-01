@@ -116,6 +116,11 @@ void DIS_publish(const char* topic, ...){
             if(topic[strIndex] == ':'){
                 strIndex++;
 
+                /* unlimited spaces after colons */
+                while(topic[strIndex] == ' '){
+                    strIndex++;
+                }
+                
                 /* find he first number to the colon command or
                  * the end of the string */
                 char strNum0[8] = {0};
@@ -143,6 +148,12 @@ void DIS_publish(const char* topic, ...){
         while((strIndex < len) && (i < MAX_NUM_OF_FORMAT_SPECIFIERS)){
             if(topic[strIndex] == ','){
                 strIndex++;
+                
+                /* unlimited spaces after commas */
+                while(topic[strIndex] == ' '){
+                    strIndex++;
+                }
+                
                 if(topic[strIndex] == 'u'){
                     strIndex++;
                     if(topic[strIndex] == '8'){
