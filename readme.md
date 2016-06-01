@@ -40,9 +40,18 @@ should set the MAX_RECEIVE_MESSAGE_LENGTH (dispatch_config.h) to the longest num
 that you plan to send, plus 8.  For completely safe receptions, you should set the RX_FRAME_LENGTH
 to twice that number.
 
-# Example Usage #
+# Usage #
 
-## Setting Up ##
+## Arduino ##
+
+A zip file containing Arduino-specific code and examples is provided in the 
+[releases](https://github.com/slightlynybbled/Dispatch/releases).  Simply unzip the contents of
+'dispatch_arduino.zip' into file into '/sketchbook/libraries/dispatch/'. To run the example
+application, Open a new Arduino environment, File -> Examples -> dispatch -> dispatchDemo.
+
+## All Other Platforms ##
+
+### Setting Up ###
 
 In order to set up the variables and functions internal to Dispatch, the following four
 functions MUST be called one time:
@@ -54,7 +63,7 @@ functions MUST be called one time:
     DIS_assignChannelRead(&read8);
     DIS_assignChannelWrite(&write8);
     
-## Running ##
+### Running ###
 
 In order to properly execute received message, the `DIS_process()` must be called continually.
 `DIS_process()` may be called at reduced intervals, but the frequency of calling this function
@@ -65,7 +74,7 @@ involved, it should be assigned as a task.
 If the platform is only sending Dispatch messages and not receiving them, then `DIS_process()`
 may be omitted.
 
-## Publishing to an Endpoint ##
+### Publishing to an Endpoint ###
 
     uint8_t myData0[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
     uint16_t myData1[] = {10, 11, 12, 13, 14, 15, 16, 17, 18, 19};
@@ -73,13 +82,13 @@ may be omitted.
     
 All subscribers to the endpoint "foo" will be called when the above statement is executed.
     
-## Subscribing to an Endpoint ##
+### Subscribing to an Endpoint ###
 
     DIS_subscribe("foo", &mySubscriberFunction);
     
 When an item is published to the endpoint "foo", then `mySubscriberFunction` is executed.
 
-## Getting the Data within the Subscriber ##
+### Getting the Data within the Subscriber ###
 
     uint8_t myData0Received[10];
     uint16_t myData1Received[10];
