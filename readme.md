@@ -7,7 +7,9 @@ order to get data from the sender to the receiver.
 The form of Dispatch was largely inspired by [Telemetry](https://github.com/Overdrivr/Telemetry),
 which is described by the author as a publish-subscribe model.
 
-More details may be found at [for(embed)](http://www.forembed.com/introducing-dispatch.html).
+Be sure to checkout the [Dispatch How-To](http://www.forembed.com/dispatch-how-to.html) and the
+[Dispatch Function Reference](http://www.forembed.com/dispatch-function-reference.html) for full
+details on how to use Dispatch.
 
 There is a sister project called [SerialDispatch](https://github.com/slightlynybbled/SerialDispatch), which
 is a Python implementation for the PC-side.  The sister project provides a Python interface useful
@@ -81,6 +83,7 @@ may be omitted.
     DIS_publish("foo:10,u8,u16", myData0, myData1);
     
 All subscribers to the endpoint "foo" will be called when the above statement is executed.
+Spaces are permitted after the colon and comma characters.
     
 ### Subscribing to an Endpoint ###
 
