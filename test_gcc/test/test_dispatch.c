@@ -246,6 +246,48 @@ void test_publish_3_u16_using_DIS_publish_u16(void){
     }
 }
 
+void test_publish_3_u16u16_using_DIS_publish_2u16(void){
+    uint8_t dataTest[WRITE_DATA_LENGTH] = 
+                        {   START_OF_FRAME,
+                            'f', 'o', 'o', 0,
+                            2, 3, 0, 68, 
+                            10, 0, 20, 0, 30, 0,
+                            40, 0, 50, 0, 60, 0,
+                            95, 36,
+                            END_OF_FRAME
+                        };
+
+    uint16_t data0[3] = {10, 20, 30};
+    uint16_t data1[3] = {40, 50, 60};
+    DIS_publish_2u16("foo:3", data0, data1);
+    
+    uint16_t i;
+    for(i = 0; i < 24; i++){
+        TEST_ASSERT_EQUAL_INT(dataTest[i], writeData[i]);
+    }
+}
+
+void test_publish_3_s16s16_using_DIS_publish_2s16(void){
+    uint8_t dataTest[WRITE_DATA_LENGTH] = 
+                        {   START_OF_FRAME,
+                            'f', 'o', 'o', 0,
+                            2, 3, 0, 85, 
+                            246, 246 ^ 0x20, 255, 236, 255, 226, 255,
+                            216, 255, 206, 255, 196, 255,
+                            198, 29,
+                            END_OF_FRAME
+                        };
+
+    int16_t data0[3] = {-10, -20, -30};
+    int16_t data1[3] = {-40, -50, -60};
+    DIS_publish_2s16("foo:3", data0, data1);
+    
+    uint16_t i;
+    for(i = 0; i < 24; i++){
+        TEST_ASSERT_EQUAL_INT(dataTest[i], writeData[i]);
+    }
+}
+
 void test_publish_3_s16_using_DIS_publish_s16(void){
     uint8_t dataTest[WRITE_DATA_LENGTH] = 
                         {   START_OF_FRAME,

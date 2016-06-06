@@ -481,6 +481,58 @@ void DIS_publish_s16(const char* topic, int16_t* data){
     FRM_finish();
 }
 
+void DIS_publish_2u16(const char* topic, uint16_t* data0, uint16_t* data1){
+    uint16_t i, dataLength;
+    
+    /* 'parseTopicString' will initialize the frame and push the topic,
+     * dimensions, and headers to the framing library, returning the data
+     * length */
+    dataLength = parseTopicString(topic, 2);
+    
+    /* send the format specifiers */
+    FRM_push((uint8_t)eU16 | ((uint8_t)((eU16 & 0x0f) << 4)));
+    
+    /* send the first array */
+    for(i = 0; i < dataLength; i++){
+        FRM_push((uint8_t)(data0[i] & 0x00ff));
+        FRM_push((uint8_t)((data0[i] & 0xff00) >> 8));
+    }
+    
+    /* send the second array */
+    for(i = 0; i < dataLength; i++){
+        FRM_push((uint8_t)(data1[i] & 0x00ff));
+        FRM_push((uint8_t)((data1[i] & 0xff00) >> 8));
+    }
+    
+    FRM_finish();
+}
+
+void DIS_publish_2s16(const char* topic, int16_t* data0, int16_t* data1){
+    uint16_t i, dataLength;
+    
+    /* 'parseTopicString' will initialize the frame and push the topic,
+     * dimensions, and headers to the framing library, returning the data
+     * length */
+    dataLength = parseTopicString(topic, 2);
+    
+    /* send the format specifiers */
+    FRM_push((uint8_t)eS16 | ((uint8_t)((eS16 & 0x0f) << 4)));
+    
+    /* send the first array */
+    for(i = 0; i < dataLength; i++){
+        FRM_push((uint8_t)(data0[i] & 0x00ff));
+        FRM_push((uint8_t)((data0[i] & 0xff00) >> 8));
+    }
+    
+    /* send the second array */
+    for(i = 0; i < dataLength; i++){
+        FRM_push((uint8_t)(data1[i] & 0x00ff));
+        FRM_push((uint8_t)((data1[i] & 0xff00) >> 8));
+    }
+    
+    FRM_finish();
+}
+
 void DIS_publish_u32(const char* topic, uint32_t* data){
     uint16_t i, dataLength;
     

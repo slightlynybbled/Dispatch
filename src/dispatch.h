@@ -90,6 +90,26 @@ void DIS_publish_s16(const char* topic, int16_t* data);
  * 
  * @param topic a text string that contains the topic and length
  * 
+ * @param data0 pointer to the first element in the first array
+ * @param data1 pointer to the first element in the second array
+ */
+void DIS_publish_2u16(const char* topic, uint16_t* data0, uint16_t* data1);
+
+/**
+ * Publish data to a particular topic
+ * 
+ * @param topic a text string that contains the topic and length
+ * 
+ * @param data0 pointer to the first element in the first array
+ * @param data1 pointer to the first element in the second array
+ */
+void DIS_publish_2s16(const char* topic, int16_t* data0, int16_t* data1);
+
+/**
+ * Publish data to a particular topic
+ * 
+ * @param topic a text string that contains the topic and length
+ * 
  * @param data pointer to the first element in the array
  */
 void DIS_publish_u32(const char* topic, uint32_t* data);
