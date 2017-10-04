@@ -17,7 +17,7 @@ int main(void){
     initDispatch();
     
     /* subscribe to the topic 'foo' */
-    DIS_subscribe("messagesReceived", &messagesReceivedSubscriber);
+    DIS_subscribe("received", &messagesReceivedSubscriber);
     DIS_subscribe("string", &stringSubscriber);
     DIS_subscribe("i", &iSubscriber);
     
@@ -44,7 +44,7 @@ void initDispatch(void){
 }
 
 void messagesReceivedSubscriber(void){
-    DIS_publish("messagesReceived,u32", &messagesReceived);
+    DIS_publish("received,u32", &messagesReceived);
 }
 
 void stringSubscriber(void){

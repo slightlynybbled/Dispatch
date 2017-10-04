@@ -5,10 +5,10 @@
 #define MAX_NUM_OF_FORMAT_SPECIFIERS    4
 
 /** The maximum number of subscriptions that will be utilized */
-#define MAX_NUM_OF_SUBSCRIPTIONS        4
+#define MAX_NUM_OF_SUBSCRIPTIONS        8
 
 /** The maximum topic string length */
-#define MAX_TOPIC_STR_LEN               8
+#define MAX_TOPIC_STR_LEN               16
 
 /** The maximum receive message length */
 #define MAX_RECEIVE_MESSAGE_LEN        32
