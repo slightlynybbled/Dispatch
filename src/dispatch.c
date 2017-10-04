@@ -746,6 +746,7 @@ uint16_t DIS_getElements(uint16_t element, void* destArray){
         }
         
         case eU8:
+        case eS8:
         {
             // typecast to a char
             uint8_t* data = (uint8_t*)destArray;
@@ -760,24 +761,10 @@ uint16_t DIS_getElements(uint16_t element, void* destArray){
             break;
         }
         
-        case eS8:
-        {
-            // typecast to a char
-            int8_t* data = (int8_t*)destArray;
-            
-            // copy data to destination array
-            i = 0;
-            while(i < rxMsg.length){
-                data[i] = (int8_t)rxMsg.data[currentIndex + i];
-                i++;
-            }
-            
-            break;
-        }
-        
         case eU16:
+        case eS16:
         {
-            // typecast to a unsigned int
+            // typecast to a int
             uint16_t* data = (uint16_t*)destArray;
             
             // copy data to destination array
@@ -791,62 +778,22 @@ uint16_t DIS_getElements(uint16_t element, void* destArray){
             break;
         }
         
-        case eS16:
-        {
-            // typecast to a int
-            int16_t* data = (int16_t*)destArray;
-            
-            // copy data to destination array
-            i = 0;
-            while(i < rxMsg.length){
-                data[i] = (int16_t)rxMsg.data[currentIndex + (i << 1)]
-                        | (int16_t)rxMsg.data[currentIndex + (i << 1) + 1] << 8;
-                i++;
-            }
-            
-            break;
-        }
-        
         case eU32:
+        case eS32:
         {
             // typecast to a int
             uint32_t* data = (uint32_t*)destArray;
             
             // copy data to destination array
             i = 0;
-            while(i < rxMsg.length8bit){
-                uint16_t dataIndex = i >> 2;
-                data[dataIndex] = (uint32_t)rxMsg.data[currentIndex + i];
-                i++;
-                data[dataIndex] |= (uint32_t)rxMsg.data[currentIndex + i] << 8;
-                i++;
-                data[dataIndex] |= (uint32_t)rxMsg.data[currentIndex + i] << 16;
-                i++;
-                data[dataIndex] |= (uint32_t)rxMsg.data[currentIndex + i] << 24;
+            while(i < rxMsg.length){
+                data[i] = (uint32_t)rxMsg.data[currentIndex + (i << 2)]
+                        | (uint32_t)rxMsg.data[currentIndex + (i << 2) + 1] << 8
+                        | (uint32_t)rxMsg.data[currentIndex + (i << 2) + 2] << 16
+                        | (uint32_t)rxMsg.data[currentIndex + (i << 2) + 3] << 24;
                 i++;
             }
             
-            break;
-        }
-        
-        case eS32:
-        {
-            // typecast to a int
-            int32_t* data = (int32_t*)destArray;
-            
-            // copy data to destination array
-            i = 0;
-            while(i < rxMsg.length8bit){
-                uint16_t dataIndex = i >> 2;
-                data[dataIndex] = (int32_t)rxMsg.data[currentIndex + i];
-                i++;
-                data[dataIndex] |= (int32_t)rxMsg.data[currentIndex + i] << 8;
-                i++;
-                data[dataIndex] |= (int32_t)rxMsg.data[currentIndex + i] << 16;
-                i++;
-                data[dataIndex] |= (int32_t)rxMsg.data[currentIndex + i] << 24;
-                i++;
-            }
             break;
         }
     }
