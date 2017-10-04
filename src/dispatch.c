@@ -785,6 +785,7 @@ uint16_t DIS_getElements(uint16_t element, void* destArray){
             while(i < rxMsg.length){
                 data[i] = (uint16_t)rxMsg.data[currentIndex + (i << 1)]
                         | (uint16_t)rxMsg.data[currentIndex + (i << 1) + 1] << 8;
+                i++;
             }
             
             break;
@@ -800,6 +801,7 @@ uint16_t DIS_getElements(uint16_t element, void* destArray){
             while(i < rxMsg.length){
                 data[i] = (int16_t)rxMsg.data[currentIndex + (i << 1)]
                         | (int16_t)rxMsg.data[currentIndex + (i << 1) + 1] << 8;
+                i++;
             }
             
             break;
