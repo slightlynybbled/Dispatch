@@ -752,7 +752,7 @@ uint16_t DIS_getElements(uint16_t element, void* destArray){
             
             // copy data to destination array
             i = 0;
-            while(i < rxMsg.length8bit){
+            while(i < rxMsg.length){
                 data[i] = (uint8_t)rxMsg.data[currentIndex + i];
                 i++;
             }
@@ -767,7 +767,7 @@ uint16_t DIS_getElements(uint16_t element, void* destArray){
             
             // copy data to destination array
             i = 0;
-            while(i < rxMsg.length8bit){
+            while(i < rxMsg.length){
                 data[i] = (int8_t)rxMsg.data[currentIndex + i];
                 i++;
             }
@@ -782,12 +782,9 @@ uint16_t DIS_getElements(uint16_t element, void* destArray){
             
             // copy data to destination array
             i = 0;
-            while(i < rxMsg.length8bit){
-                uint16_t dataIndex = i >> 1;
-                data[dataIndex] = (uint16_t)rxMsg.data[currentIndex + i];
-                i++;
-                data[dataIndex] |= (uint16_t)rxMsg.data[currentIndex + i] << 8;
-                i++;
+            while(i < rxMsg.length){
+                data[i] = (uint16_t)rxMsg.data[currentIndex + (i << 1)]
+                        | (uint16_t)rxMsg.data[currentIndex + (i << 1) + 1] << 8;
             }
             
             break;
@@ -800,12 +797,9 @@ uint16_t DIS_getElements(uint16_t element, void* destArray){
             
             // copy data to destination array
             i = 0;
-            while(i < rxMsg.length8bit){
-                uint16_t dataIndex = i >> 1;
-                data[dataIndex] = (int16_t)rxMsg.data[currentIndex + i];
-                i++;
-                data[dataIndex] |= (int16_t)rxMsg.data[currentIndex + i] << 8;
-                i++;
+            while(i < rxMsg.length){
+                data[i] = (int16_t)rxMsg.data[currentIndex + (i << 1)]
+                        | (int16_t)rxMsg.data[currentIndex + (i << 1) + 1] << 8;
             }
             
             break;
