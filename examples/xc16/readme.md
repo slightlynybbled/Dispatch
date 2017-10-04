@@ -6,7 +6,7 @@ code is the primary example code.
 
 ## main.c ##
 
-This is an example c file that works in conjunction with [PyDispatch](https://github.com/slightlynybbled/PyDispatch).
+This is an example c file that works in conjunction with [SerialDispatch](https://github.com/slightlynybbled/SerialDispatch).
 This file will publish one time at initialization to the topic `bar`.  It will also
 subscribe to the topic `foo`.  Every time that the topic `foo` is received, the code
 will also publish a count to topic `i`.
