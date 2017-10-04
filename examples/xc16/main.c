@@ -4,13 +4,17 @@
 #include "uart.h"
 #include "config.h"
 
+static uint32_t messagesReceived = 0;
+
 void initDispatch(void);
 
 void messagesReceivedSubscriber(void);
 void stringSubscriber(void);
 void iSubscriber(void);
-
-static uint32_t messagesReceived = 0;
+void arraySubscriber(void);
+void arrays8Subscriber(void);
+void arrays16Subscriber(void);
+void arrays32Subscriber(void);
 
 int main(void){
     /* initialize the communication channels */
@@ -20,6 +24,10 @@ int main(void){
     DIS_subscribe("received", &messagesReceivedSubscriber);
     DIS_subscribe("string", &stringSubscriber);
     DIS_subscribe("i", &iSubscriber);
+    DIS_subscribe("array", &arraySubscriber);
+    DIS_subscribe("arrays8", &arrays8Subscriber);
+    DIS_subscribe("arrays16", &arrays16Subscriber);
+    DIS_subscribe("arrays32", &arrays32Subscriber);
     
     /* forever loop */
     while(1){
@@ -57,7 +65,7 @@ void stringSubscriber(void){
     DIS_getElements(0, strReceived);
     
     /* publish i back to the sender to 'close the loop' */
-    DIS_publish("string", "message from the micro!");
+    DIS_publish("string", "uC msg");
 }
 
 void iSubscriber(void){
@@ -74,4 +82,72 @@ void iSubscriber(void){
     
     /* publish i back to the sender to 'close the loop' */
     DIS_publish("i,u16", &i);
+}
+
+void arraySubscriber(void){
+    messagesReceived++; // increment messages received
+    
+    int16_t arr[4];             // <--- note that the type here must match the transmitted type!
+    DIS_getElements(0, arr);
+    
+    uint16_t i;
+    for(i=0; i<4; i++){
+        arr[i] += 1;    // modify each element of the array in preparation to return it
+    }
+    
+    DIS_publish("array:4,s16", arr);    // publish 4 elements of the array
+}
+
+void arrays8Subscriber(void){
+    messagesReceived++; // increment messages received
+    
+    int8_t arr0[4];    // <--- note that the type here must match the transmitted type!
+    DIS_getElements(0, arr0);
+    
+    uint8_t arr1[4];   // <--- note that the type here must match the transmitted type!
+    DIS_getElements(1, arr1);
+    
+    uint16_t i;
+    for(i=0; i<4; i++){
+        arr0[i] += 1;   // modify each element of the array in preparation to return it
+        arr1[i] += 1;
+    }
+    
+    DIS_publish("arrays8:4,s8,u8", arr0, arr1);    // publish 4 elements of two arrays
+}
+
+void arrays16Subscriber(void){
+    messagesReceived++; // increment messages received
+    
+    int16_t arr0[4];    // <--- note that the type here must match the transmitted type!
+    DIS_getElements(0, arr0);
+    
+    uint16_t arr1[4];   // <--- note that the type here must match the transmitted type!
+    DIS_getElements(1, arr1);
+    
+    uint16_t i;
+    for(i=0; i<4; i++){
+        arr0[i] += 1;   // modify each element of the array in preparation to return it
+        arr1[i] += 1;
+    }
+    
+    DIS_publish("arrays16:4,s16,u16", arr0, arr1);    // publish 4 elements of two arrays
+}
+
+void arrays32Subscriber(void){
+    messagesReceived++; // increment messages received
+    
+    int32_t arr0[4];    // <--- note that the type here must match the transmitted type!
+    DIS_getElements(0, arr0);
+    
+    uint32_t arr1[4];   // <--- note that the type here must match the transmitted type!
+    DIS_getElements(1, arr1);
+    
+    uint16_t i;
+    for(i=0; i<4; i++){
+        arr0[i] += 1;   // modify each element of the array in preparation to return it
+        arr1[i] += 1;
+    }
+    
+    DIS_publish("arrays32:4,s32,u32", arr0, arr1);    // publish 4 elements of two arrays
 }

@@ -11,10 +11,10 @@
 #define MAX_TOPIC_STR_LEN               16
 
 /** The maximum receive message length */
-#define MAX_RECEIVE_MESSAGE_LEN        32
+#define MAX_RECEIVE_MESSAGE_LEN        64
 
 /** The received frame length */
-#define RX_FRAME_LENGTH 64
+#define RX_FRAME_LENGTH 256
 
 #endif	/* DISPATCH_CONFIG_H */
 
