@@ -7,8 +7,7 @@ order to get data from the sender to the receiver.
 The form of Dispatch was largely inspired by [Telemetry](https://github.com/Overdrivr/Telemetry),
 which is described by the author as a publish-subscribe model.
 
-Be sure to checkout the [Dispatch How-To](http://www.forembed.com/dispatch-how-to.html) and the
-[Dispatch Function Reference](http://www.forembed.com/dispatch-function-reference.html) for full
+Be sure to checkout the [Dispatch How-To](http://www.forembed.com/dispatch-how-to.html) for full
 details on how to use Dispatch.
 
 There is a sister project called [SerialDispatch](https://github.com/slightlynybbled/SerialDispatch), which
